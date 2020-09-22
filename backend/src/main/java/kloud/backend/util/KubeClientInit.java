@@ -3,11 +3,9 @@ package kloud.backend.util;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.ClientBuilder;
-import io.kubernetes.client.util.KubeConfig;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.FileReader;
 import java.io.IOException;
 
 @Component
@@ -25,14 +23,9 @@ class KubeClientInit {
             client = ClientBuilder.cluster().build();
         } catch (Exception ignored) {
             System.out.println("Try to init k8s client using user provided config");
-
-            // file path to your KubeConfig
-            String kubeConfigPath = System.getProperty("user.home") + "\\.kube\\config";
-
             // loading the out-of-cluster config, a kubeconfig from file-system
             try {
-                client =
-                        ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(new FileReader(kubeConfigPath))).build();
+                client = ClientBuilder.defaultClient();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
