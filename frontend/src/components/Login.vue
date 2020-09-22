@@ -26,8 +26,8 @@
         data () {
             return {
                 loginForm: {
-                    username: 'ayc',
-                    password: '123'
+                    username: '17373516',
+                    password: '12345678'
                 },
                 responseResult: []
             }
@@ -35,22 +35,22 @@
         methods: {
             login () {
                 // var _this = this
-                // this.$axios
-                //     .post('/login', this.$qs.stringify({
-                //         username: this.loginForm.username,
-                //         password: this.loginForm.password
-                //     }))
-                //     .then(successResponse => {
-                //         if (successResponse.data.code === 200) {
-                //             _this.$store.commit('login', _this.loginForm)
-                //             var path = this.$route.query.redirect
-                //             this.$router.replace({path: path === '/' || path
-                //                 === undefined ? '/index' : path})
-                //         }
-                //     })
-                // // .catch(failResponse => {
-                // // })
-                this.$router.replace({path: '/home'})
+                this.$axios
+                    .post('/login', this.loginForm/*this.$qs.stringify({
+                        username: this.loginForm.username,
+                        password: this.loginForm.password
+                    })*/)
+                    .then(successResponse => {
+                        alert(successResponse.data.realName)
+                        // if (successResponse.data.code === 200) {
+                        //     _this.$store.commit('login', _this.loginForm)
+                        //     var path = this.$route.query.redirect
+                        //     this.$router.replace({path: path === '/' || path
+                        //         === undefined ? '/index' : path})
+                        // }
+                    })
+                // .catch(failResponse => {
+                // })
             }
         }
     }
@@ -62,7 +62,7 @@
     .login-container {
         border-radius: 15px;
         background-clip: padding-box;
-        margin: 90px auto;
+        margin: 150px auto;
         width: 350px;
         padding: 35px 35px 15px 35px;
         background: #fff;

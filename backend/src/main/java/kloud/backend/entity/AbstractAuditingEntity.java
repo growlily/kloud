@@ -40,7 +40,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
     @JsonIgnore
-    private Instant lastModifiedBy;
+    private String lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")

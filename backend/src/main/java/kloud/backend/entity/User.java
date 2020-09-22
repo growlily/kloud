@@ -43,7 +43,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @JsonIgnore
     @NotNull
-    @Size(min = 6, max = 60)
+    @Size(min = 1, max = 60)
     @Column(name = "password", length = 60, nullable = false)
     private String password;
 
@@ -55,6 +55,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
     private String email;
+
+    private Integer userType = 0;   //1为教师，2为管理员
 
     @Override
     public boolean equals(Object obj) {
