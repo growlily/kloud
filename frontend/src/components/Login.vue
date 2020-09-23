@@ -26,7 +26,7 @@
         data () {
             return {
                 loginForm: {
-                    username: '00000000',
+                    username: '0000',
                     password: '12345678'
                 },
                 responseResult: []
@@ -40,10 +40,8 @@
                     .then(successResponse => {
                         if (successResponse.data &&
                             successResponse.data.login != undefined) {
-                            window.sessionStorage.setItem('name',
-                                successResponse.data.realName)
-                            window.sessionStorage.setItem('type',
-                                successResponse.data.userType)
+                            window.sessionStorage.setItem('user',
+                                JSON.stringify(successResponse.data))
                             this.$router.replace({path: '/home'})
                         }
 

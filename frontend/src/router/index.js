@@ -6,6 +6,7 @@ import Home from "@/components/Home";
 import Course from "@/components/course/Course";
 import Container from "@/components/container/Container";
 import Logging from "@/components/logging/Logging";
+import Private from "@/components/private/Private";
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ const routes = [
                 path: '/logging',
                 name: 'logging',
                 component: Logging
+            },
+            {
+                path: '/private',
+                name: 'private',
+                component: Private
             }
         ]
     }

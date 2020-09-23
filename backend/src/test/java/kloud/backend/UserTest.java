@@ -1,16 +1,25 @@
 package kloud.backend;
 
+import kloud.backend.controller.vm.ChangeInfoVM;
+import kloud.backend.controller.vm.ChangePwdVM;
 import kloud.backend.entity.User;
 import kloud.backend.repository.UserRepository;
+import kloud.backend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @SpringBootTest
 public class UserTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Test
     public void  addTest() {
@@ -42,12 +51,47 @@ public class UserTest {
     @Test
     public void addTest2() {
         User user1 = new User();
-        user1.setLogin("00000000");
+        user1.setLogin("2020");
         user1.setPassword("12345678");
-        user1.setEmail("wssadwdayc123@gmail.com");
-        user1.setUserType(2);
+        user1.setEmail("wssadwdayc@gmail.com");
+        user1.setUserType(1);
+        user1.setRealName("人民教师");
         user1.setCreatedBy("测试人员");
         userRepository.save(user1);
+
+        User user2 = new User();
+        user2.setLogin("0000");
+        user2.setPassword("12345678");
+        user2.setEmail("wssadwdayc123@gmail.com");
+        user2.setUserType(2);
+        user2.setRealName("管理员");
+        user2.setCreatedBy("测试人员");
+        userRepository.save(user2);
+    }
+
+    /*
+    修改邮箱和密码
+     */
+    @Test
+    @Transactional
+    public void updateTest() {
+        ChangeInfoVM changeInfoVM = new ChangeInfoVM();
+        changeInfoVM.setId(1L);
+        changeInfoVM.setEmail("1091390860@qq.com");
+        changeInfoVM.setRealName("敖哈哈");
+        userService.changeInfo(changeInfoVM).ifPresent(System.out::println);
+    }
+
+    /*
+    修改密码
+     */
+    @Test
+    @Transactional
+    public void updateTest2() {
+        ChangePwdVM changePwdVM = new ChangePwdVM();
+        changePwdVM.setId(1L);
+        changePwdVM.setPassword("ayc1999");
+        userService.changePwd(changePwdVM);
     }
 
 }

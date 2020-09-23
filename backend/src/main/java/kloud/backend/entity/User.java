@@ -22,7 +22,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "saas_user")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @ToString

@@ -1,5 +1,7 @@
 package kloud.backend.controller;
 
+import kloud.backend.controller.vm.ChangeInfoVM;
+import kloud.backend.controller.vm.ChangePwdVM;
 import kloud.backend.controller.vm.LoginVM;
 import kloud.backend.entity.User;
 import kloud.backend.service.UserService;
@@ -24,4 +26,20 @@ public class UserController {
         Optional<User> login = userService.login(loginVM.getUsername(), loginVM.getPassword());
         return login.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+    @CrossOrigin
+    @PostMapping("/change/info")
+    public ResponseEntity<User> changeInfo(@Valid @RequestBody ChangeInfoVM changeInfoVM) {
+        Optional<User> user = userService.changeInfo(changeInfoVM);
+        return user.map(u1 -> new ResponseEntity<>(u1, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
+
+    @CrossOrigin
+    @PostMapping("/change/pwd")
+    public ResponseEntity<Void> changePwd(@Valid @RequestBody ChangePwdVM changePwdVM) {
+        return userService.changePwd(changePwdVM) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+
 }

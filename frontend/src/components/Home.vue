@@ -35,10 +35,10 @@
 
                                 {{this.username}}</span>
                         </template>
-                        <el-menu-item index=""><span><span
+                        <el-menu-item index="10" @click="toPrivate"><span><span
                                 class="iconfont icon-yonghu icon_universal"></span>个人信息
                         </span></el-menu-item>
-                        <el-menu-item index="" @click="logout"><span><span
+                        <el-menu-item index="11" @click="logout"><span><span
                                 class="iconfont icon-tuichu icon_universal"></span>退出
                         </span></el-menu-item>
                     </el-submenu>
@@ -57,13 +57,22 @@
         name: "Home",
         data() {
             return {
-                iconVisible: false,
-                userType: window.sessionStorage.getItem('type'),
-                username: window.sessionStorage.getItem('name')
+                userType: null,
+                username: null
+
             }
         },
 
+        mounted() {
+            let user = JSON.parse(window.sessionStorage.getItem('user'))
+            this.userType = user.userType
+            this.username = user.realName
+        },
+
         methods: {
+            toPrivate() {
+                this.$router.replace({path: '/private'})
+            },
             logout() {
                 window.sessionStorage.removeItem('user')
                 this.$router.replace({path: '/login'})
@@ -71,6 +80,12 @@
         }
     }
 </script>
+
+<style>
+    body {
+        background-color: #f5f7f9;
+    }
+</style>
 
 <style scoped>
     .el-aside {
@@ -99,12 +114,14 @@
         position: fixed;
         width: 100%;
         padding-left: 0;
+        background-color: white;
     }
 
     .el_main {
         margin-top: 100px;
         padding-left: 256px;
         padding-right: 20px;
+        background-color: #f5f7f9;
     }
 
     #header_block {
