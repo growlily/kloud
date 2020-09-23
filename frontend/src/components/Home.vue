@@ -3,14 +3,14 @@
         <el-aside width="250px">
 
             <el-col class="menu_col">
-                <el-menu background-color="#31a6ee">
-                    <el-menu-item>
+                <el-menu background-color="#31a6ee" router>
+                    <el-menu-item index="/course">
                         <span slot="title">课程信息</span>
                     </el-menu-item>
-                    <el-menu-item>
+                    <el-menu-item index="/container">
                         <span slot="title">容器信息</span>
                     </el-menu-item>
-                    <el-menu-item>
+                    <el-menu-item index="/logging">
                         <span slot="title">日志记录</span>
                     </el-menu-item>
                 </el-menu>
@@ -22,38 +22,30 @@
                     <img src="../assets/school_logo.png" class="img_logo">
                 </div>
                 <span class="header_title">云平台</span>
-                <el-menu class="header_user">
-                    <el-submenu>
+                <el-menu class="header_user" default-active="0">
+                    <el-submenu index="1" >
                         <template slot="title">
                             <span>
                                 <span
-                                        class="iconfont icon-xuesheng icon_universal"></span>
+                                        class="iconfont icon-xuesheng icon_universal" v-if="userType == 0"></span>
                                 <span
-                                        class="iconfont icon-jiaoshi icon_universal" v-if="iconVisible"></span>
+                                        class="iconfont icon-jiaoshi icon_universal" v-if="userType == 1"></span>
                                 <span
-                                        class="iconfont icon-guanliyuan icon_universal" v-if="iconVisible"></span>
+                                        class="iconfont icon-guanliyuan icon_universal" v-if="userType == 2"></span>
 
-                                敖远超</span>
+                                {{this.username}}</span>
                         </template>
-                        <el-menu-item><span><span
+                        <el-menu-item index=""><span><span
                                 class="iconfont icon-yonghu icon_universal"></span>个人信息
                         </span></el-menu-item>
-                        <el-menu-item><span><span
+                        <el-menu-item index="" @click="logout"><span><span
                                 class="iconfont icon-tuichu icon_universal"></span>退出
                         </span></el-menu-item>
                     </el-submenu>
                 </el-menu>
             </el-header>
             <el-main class="el_main">
-                <div>
-                    <p>1we</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1
-                </p><p>1</p><p>1</p><p>1</p>
-                    <p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p>
-                    <p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p>
-                    <p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p>
-                    <p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p><p>1</p>
-                </div>
-
+                <router-view></router-view>
             </el-main>
         </el-container>
     </el-container>
@@ -65,11 +57,17 @@
         name: "Home",
         data() {
             return {
-                iconVisible: false
+                iconVisible: false,
+                userType: window.sessionStorage.getItem('type'),
+                username: window.sessionStorage.getItem('name')
             }
         },
-        methods: {
 
+        methods: {
+            logout() {
+                window.sessionStorage.removeItem('user')
+                this.$router.replace({path: '/login'})
+            }
         }
     }
 </script>
@@ -105,6 +103,8 @@
 
     .el_main {
         margin-top: 100px;
+        padding-left: 256px;
+        padding-right: 20px;
     }
 
     #header_block {

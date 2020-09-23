@@ -26,7 +26,7 @@
         data () {
             return {
                 loginForm: {
-                    username: '17373516',
+                    username: '00000000',
                     password: '12345678'
                 },
                 responseResult: []
@@ -36,12 +36,18 @@
             login () {
                 // var _this = this
                 this.$axios
-                    .post('/login', this.loginForm/*this.$qs.stringify({
-                        username: this.loginForm.username,
-                        password: this.loginForm.password
-                    })*/)
+                    .post('/login', this.loginForm)
                     .then(successResponse => {
-                        alert(successResponse.data.realName)
+                        if (successResponse.data &&
+                            successResponse.data.login != undefined) {
+                            window.sessionStorage.setItem('name',
+                                successResponse.data.realName)
+                            window.sessionStorage.setItem('type',
+                                successResponse.data.userType)
+                            this.$router.replace({path: '/home'})
+                        }
+
+                        // alert(successResponse.data.realName)
                         // if (successResponse.data.code === 200) {
                         //     _this.$store.commit('login', _this.loginForm)
                         //     var path = this.$route.query.redirect
@@ -50,6 +56,7 @@
                         // }
                     })
                 // .catch(failResponse => {
+                //     alert(failResponse)
                 // })
             }
         }

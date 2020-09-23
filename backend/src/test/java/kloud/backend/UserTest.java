@@ -39,4 +39,15 @@ public class UserTest {
         userRepository.save(user3);
     }
 
+    @Test
+    public void addTest2() {
+        User user1 = new User();
+        user1.setLogin("00000000");
+        user1.setPassword("12345678");
+        user1.setEmail("wssadwdayc123@gmail.com");
+        user1.setUserType(2);
+        user1.setCreatedBy("测试人员");
+        userRepository.save(user1);
+    }
+
 }
