@@ -25,19 +25,18 @@ public class PodController {
 
     @CrossOrigin
     @PostMapping("/list")
-    public ResponseEntity<List<KPodInfo>> listNamespace(@RequestBody Map<String, String> param) {
-        String ns = param.getOrDefault("namespace", "default");
-        return new ResponseEntity<>(podService.listNamespace(ns), HttpStatus.OK);
+    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam("id") String id) {
+        return new ResponseEntity<>(podService.listUser(id), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody Map<String, String> param) {
+    public ResponseEntity<String> create(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
         String image = param.get("image");
         if (image == null) {
             return new ResponseEntity<>("Missing param \"image\"", HttpStatus.BAD_REQUEST);
         }
-        String result = podService.create(image);
+        String result = podService.create(image, id);
         if (result == null) {
             return new ResponseEntity<>("creation failed", HttpStatus.OK);
         }
@@ -46,18 +45,18 @@ public class PodController {
 
     @CrossOrigin
     @PostMapping("/delete")
-    public ResponseEntity<Boolean> delete(@RequestBody Map<String, String> param) {
+    public ResponseEntity<Boolean> delete(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
         String podName = param.get("podName");
-        Boolean result = podService.delete(podName);
+        Boolean result = podService.delete(podName, id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping("/log")
-    public ResponseEntity<String> log(@RequestBody Map<String, String> param) {
+    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
         String name = param.get("podName");
         try {
-            String log = podService.log(name);
+            String log = podService.log(name, id);
             return new ResponseEntity<>(log, HttpStatus.OK);
         } catch (ApiException e) {
             return new ResponseEntity<>(HttpStatus.valueOf(e.getCode()));
