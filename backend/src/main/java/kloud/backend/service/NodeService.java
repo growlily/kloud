@@ -1,8 +1,10 @@
 package kloud.backend.service;
 
+import io.kubernetes.client.Metrics;
+import io.kubernetes.client.custom.NodeMetricsList;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1NodeList;
+import io.kubernetes.client.openapi.models.V1Node;
 import kloud.backend.entity.KNodeInfo;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +14,31 @@ import java.util.stream.Collectors;
 @Service
 public class NodeService {
     public List<KNodeInfo> list() {
-        CoreV1Api coreV1Api = new CoreV1Api();
-        V1NodeList result = null;
+        Metrics metrics = new Metrics();
         try {
-            result = coreV1Api.listNode(null, null, null, null, null, null, null, null, null);
-
+            NodeMetricsList nodeMetricsList = metrics.getNodeMetrics();
+            return nodeMetricsList.getItems().stream().map(nodeMetrics -> {
+                V1Node node = detail(nodeMetrics.getMetadata().getName());
+                return new KNodeInfo(node, nodeMetrics);
+            }).collect(Collectors.toList());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CoreV1Api#listNode");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    V1Node detail(String name) {
+        CoreV1Api api = new CoreV1Api();
+        try {
+            return api.readNode(name, null, null, null);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CoreV1Api#readNode");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
             e.printStackTrace();
+            return null;
         }
-        assert result != null;
-        return result.getItems().stream().map(KNodeInfo::new).collect(Collectors.toList());
     }
+
 }
