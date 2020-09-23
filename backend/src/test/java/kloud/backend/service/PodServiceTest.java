@@ -19,7 +19,7 @@ class PodServiceTest {
 
     @Test
     void listNamespace() {
-        System.out.println(podService.listNamespace("default"));
+        System.out.println(podService.listUser("default"));
     }
 
 }
