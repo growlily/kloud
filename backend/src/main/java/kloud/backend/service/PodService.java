@@ -1,5 +1,9 @@
 package kloud.backend.service;
 
+import com.google.common.io.ByteStreams;
+import io.kubernetes.client.Exec;
+import io.kubernetes.client.Metrics;
+import io.kubernetes.client.custom.PodMetricsList;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
@@ -7,11 +11,11 @@ import kloud.backend.entity.KPodInfo;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 @Service
 public class PodService {
     private final String DEFAULT = "default";
@@ -31,18 +35,28 @@ public class PodService {
     }
 
     public List<KPodInfo> listNamespace(String namespace) {
-        // the CoreV1Api loads default api-client from global configuration.
-        CoreV1Api api = new CoreV1Api();
-
-        // invokes the CoreV1Api client
-        V1PodList list = null;
+        Metrics metrics = new Metrics();
         try {
-            list = api.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null);
+            PodMetricsList podMetricsList = metrics.getPodMetrics(namespace);
+            return podMetricsList.getItems().stream().map(podMetrics -> {
+                V1Pod pod = detail(podMetrics.getMetadata().getName(), namespace);
+                return new KPodInfo(pod, podMetrics);
+            }).collect(Collectors.toList());
+
         } catch (ApiException e) {
             e.printStackTrace();
+            return null;
         }
-        assert list != null;
-        return list.getItems().stream().map(KPodInfo::new).collect(Collectors.toList());
+    }
+
+    V1Pod detail(String podName, String namespace) {
+        CoreV1Api api = new CoreV1Api();
+        try {
+            return api.readNamespacedPod(podName, namespace, null, null, null);
+        } catch (ApiException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String log(String podName, String namespace) throws ApiException {
@@ -92,4 +106,51 @@ public class PodService {
             return false;
         }
     }
+
+
+    public void anoexec(String podName, String namespace, String command)
+            throws IOException, ApiException, InterruptedException {
+
+        Exec exec = new Exec();
+        boolean tty = System.console() != null;
+
+        // final Process proc = exec.exec("default", "nginx-4217019353-k5sn9", new String[]
+        //   {"sh", "-c", "echo foo"}, true, tty);
+        final Process proc =
+                exec.exec(namespace, podName, new String[]{"ls", "-al"}, true, tty);
+
+        Thread in =
+                new Thread(
+                        () -> {
+                            try {
+                                ByteStreams.copy(System.in, proc.getOutputStream());
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        });
+        in.start();
+
+        Thread out =
+                new Thread(
+                        () -> {
+                            try {
+                                ByteStreams.copy(proc.getInputStream(), System.out);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        });
+        out.start();
+
+        proc.waitFor();
+
+        // wait for any last output; no need to wait for input thread
+        out.join();
+
+        proc.destroy();
+
+        System.exit(proc.exitValue());
+    }
+
+
 }
+
