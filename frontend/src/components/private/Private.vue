@@ -96,8 +96,10 @@
             let user = JSON.parse(window.sessionStorage.getItem('user'))
             this.realName =
                         user.realName
+            this.changeInfoItem.realName = user.realName
             this.email =
                     user.email
+            this.changeInfoItem.email = user.email
             this.changeInfoItem.id = user.id
             this.changePwdItem.id = user.id
         },

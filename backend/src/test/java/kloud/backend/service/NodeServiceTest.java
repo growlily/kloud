@@ -17,5 +17,6 @@ class NodeServiceTest {
 
     @Test
     void detail() {
+
     }
 }

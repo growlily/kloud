@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 
+/**
+ * k8s client's initialization.
+ */
 @Component
 class KubeClientInit {
     @PostConstruct

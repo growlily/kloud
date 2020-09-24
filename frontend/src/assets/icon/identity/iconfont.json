@@ -13,6 +13,20 @@
       "unicode_decimal": 58991
     },
     {
+      "icon_id": "14185076",
+      "name": "学期",
+      "font_class": "xueqi",
+      "unicode": "e767",
+      "unicode_decimal": 59239
+    },
+    {
+      "icon_id": "16450435",
+      "name": "总人数",
+      "font_class": "zongrenshu",
+      "unicode": "e83b",
+      "unicode_decimal": 59451
+    },
+    {
       "icon_id": "7712204",
       "name": "教师",
       "font_class": "jiaoshi",

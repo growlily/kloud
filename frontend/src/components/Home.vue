@@ -3,12 +3,20 @@
         <el-aside width="250px">
 
             <el-col class="menu_col">
-                <el-menu background-color="#31a6ee" router>
+                <el-menu background-color="#31a6ee" router v-if="userType == 0">
                     <el-menu-item index="/course">
                         <span slot="title">课程信息</span>
                     </el-menu-item>
                     <el-menu-item index="/container">
                         <span slot="title">容器信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="/logging">
+                        <span slot="title">日志记录</span>
+                    </el-menu-item>
+                </el-menu>
+                <el-menu background-color="#31a6ee" router v-if="userType == 1">
+                    <el-menu-item index="/course">
+                        <span slot="title">我的课程</span>
                     </el-menu-item>
                     <el-menu-item index="/logging">
                         <span slot="title">日志记录</span>

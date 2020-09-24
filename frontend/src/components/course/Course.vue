@@ -1,13 +1,14 @@
 <template>
     <div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium consequuntur dolor ipsam officiis quod ut, voluptas. Accusamus distinctio, eos fugiat iste pariatur ratione repellat unde voluptates. Excepturi fugiat provident quidem?
+        <course-teacher></course-teacher>
     </div>
 </template>
 
 <script>
+    import CourseTeacher from "@/components/course/CourseTeacher";
     export default {
-        name: "Course"
-
+        name: "Course",
+        components: {CourseTeacher}
     }
 </script>
 
