@@ -3,6 +3,7 @@ package kloud.backend.service;
 import com.google.common.io.ByteStreams;
 import io.kubernetes.client.Exec;
 import io.kubernetes.client.Metrics;
+import io.kubernetes.client.custom.PodMetrics;
 import io.kubernetes.client.custom.PodMetricsList;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -16,7 +17,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Service
 public class PodService {
     public List<KPodInfo> listAll() {
@@ -36,18 +39,34 @@ public class PodService {
 
     public List<KPodInfo> listUser(String uid) {
         String namespace = UserNSUtil.toNS(uid);
-        Metrics metrics = new Metrics();
+        CoreV1Api api = new CoreV1Api();
         try {
-            PodMetricsList podMetricsList = metrics.getPodMetrics(namespace);
-            return podMetricsList.getItems().stream().map(podMetrics -> {
-                V1Pod pod = detail(podMetrics.getMetadata().getName(), namespace);
-                return new KPodInfo(pod, podMetrics);
-            }).collect(Collectors.toList());
-
+            return api.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null)
+                    .getItems().stream().map(pod ->
+                            getPodMetrics(Objects.requireNonNull(pod.getMetadata()).getName(), namespace)
+                                    .map(podMetrics -> new KPodInfo(pod, podMetrics))
+                                    .orElseGet(() -> new KPodInfo(pod))
+                    ).collect(Collectors.toList());
         } catch (ApiException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private Optional<PodMetrics> getPodMetrics(String podName, String namespace) {
+        Metrics metrics = new Metrics();
+        try {
+            PodMetricsList podMetricsList = metrics.getPodMetrics(namespace);
+            for (PodMetrics podMetrics : podMetricsList.getItems()) {
+                if (Objects.equals(podMetrics.getMetadata().getName(), podName)) {
+                    return Optional.of(podMetrics);
+                }
+            }
+
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 
     private V1Pod detail(String podName, String namespace) {
