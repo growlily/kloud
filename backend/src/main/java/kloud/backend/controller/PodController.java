@@ -1,8 +1,8 @@
 package kloud.backend.controller;
 
 import io.kubernetes.client.openapi.ApiException;
-import kloud.backend.service.dto.KPodInfo;
 import kloud.backend.service.PodService;
+import kloud.backend.service.dto.KPodInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +68,7 @@ public class PodController {
     }
 
     @CrossOrigin
-    @GetMapping("/log")
+    @GetMapping("/logt")
     public ResponseEntity<String> log(@RequestParam("id") String id, @RequestParam String podName) {
         try {
             String log = podService.log(podName, id);
