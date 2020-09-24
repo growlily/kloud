@@ -8,7 +8,7 @@ import io.kubernetes.client.custom.PodMetricsList;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
-import kloud.backend.entity.KPodInfo;
+import kloud.backend.service.dto.KPodInfo;
 import kloud.backend.util.UserNSUtil;
 import org.springframework.stereotype.Service;
 
@@ -108,20 +108,29 @@ public class PodService {
         }
     }
 
-    public boolean delete(String podName, String uid) {
+    public String delete(String podName, String uid) throws ApiException {
+        CoreV1Api api = new CoreV1Api();
+        String namespace = UserNSUtil.toNS(uid);
+
+        api.deleteNamespacedPod(podName, namespace, null, null, null, null, null, null);
+        return "success";
+    }
+
+    public String shell(String podName, String uid) {
         CoreV1Api api = new CoreV1Api();
         String namespace = UserNSUtil.toNS(uid);
         try {
-            api.deleteNamespacedPod(podName, namespace, null, null, null, null, null, null);
-            return true;
+            return api.connectGetNamespacedPodExec(podName, namespace, "bash", null, true, true, true, true);
+
         } catch (ApiException e) {
-            System.err.println("Exception when calling CoreV1Api#deleteNamespacedPod");
+            System.err.println("Exception when calling CoreV1Api#connectGetNamespacedPodExec");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
             e.printStackTrace();
-            return false;
+            return null;
         }
+
     }
 
 

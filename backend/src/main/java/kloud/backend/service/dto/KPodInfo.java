@@ -1,9 +1,11 @@
-package kloud.backend.entity;
+package kloud.backend.service.dto;
 
+import io.kubernetes.client.custom.ContainerMetrics;
 import io.kubernetes.client.custom.PodMetrics;
 import io.kubernetes.client.openapi.models.V1Pod;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -25,13 +27,15 @@ public class KPodInfo {
     }
 
     public KPodInfo(V1Pod v1Pod, PodMetrics metrics) {
-        name = Objects.requireNonNull(v1Pod.getMetadata()).getName();
-        image = Objects.requireNonNull(v1Pod.getSpec()).getContainers().get(0).getImage();
-        status = Objects.requireNonNull(v1Pod.getStatus()).getPhase();
+        this(v1Pod);
         if (status != null && status.equals("Running")) {
 //            cpuUsage = (int) metrics.getContainers().get(0).getUsage().get(CPU).getNumber().doubleValue();
-            double memUsage = metrics.getContainers().get(0).getUsage().get(MEMORY).getNumber().doubleValue();
-            this.memUsage = (int) (memUsage / MB);
+            List<ContainerMetrics> list = metrics.getContainers();
+            //不一定有在运行的容器？
+            if (!list.isEmpty()) {
+                double memUsage = list.get(0).getUsage().get(MEMORY).getNumber().doubleValue();
+                this.memUsage = (int) (memUsage / MB);
+            }
         }
     }
 

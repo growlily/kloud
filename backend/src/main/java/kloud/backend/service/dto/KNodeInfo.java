@@ -1,4 +1,4 @@
-package kloud.backend.entity;
+package kloud.backend.service.dto;
 
 import io.kubernetes.client.custom.NodeMetrics;
 import io.kubernetes.client.openapi.models.V1Node;

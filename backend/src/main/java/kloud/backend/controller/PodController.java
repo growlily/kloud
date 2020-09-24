@@ -1,7 +1,7 @@
 package kloud.backend.controller;
 
 import io.kubernetes.client.openapi.ApiException;
-import kloud.backend.entity.KPodInfo;
+import kloud.backend.service.dto.KPodInfo;
 import kloud.backend.service.PodService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +24,21 @@ public class PodController {
     }
 
     @CrossOrigin
-    @PostMapping("/list")
-    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam("id") String id) {
+    @GetMapping("/list")
+    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam String id) {
         return new ResponseEntity<>(podService.listUser(id), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
+    public ResponseEntity<String> create(@RequestBody Map<String, String> param) {
         String image = param.get("image");
         if (image == null) {
             return new ResponseEntity<>("Missing param \"image\"", HttpStatus.BAD_REQUEST);
+        }
+        String id = param.get("id");
+        if (id == null) {
+            return new ResponseEntity<>("Missing param \"id\"", HttpStatus.BAD_REQUEST);
         }
         String result = podService.create(image, id);
         if (result == null) {
@@ -45,21 +49,40 @@ public class PodController {
 
     @CrossOrigin
     @PostMapping("/delete")
-    public ResponseEntity<Boolean> delete(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
+    public ResponseEntity<String> delete(@RequestBody Map<String, String> param) {
         String podName = param.get("podName");
-        Boolean result = podService.delete(podName, id);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        if (podName == null) {
+            return new ResponseEntity<>("Missing param \"podName\"", HttpStatus.BAD_REQUEST);
+        }
+        String id = param.get("id");
+        if (id == null) {
+            return new ResponseEntity<>("Missing param \"id\"", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            String result = podService.delete(podName, id);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (ApiException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getResponseBody(), HttpStatus.valueOf(e.getCode()));
+        }
     }
 
     @CrossOrigin
-    @PostMapping("/log")
-    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
-        String name = param.get("podName");
+    @GetMapping("/log")
+    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestParam String podName) {
         try {
-            String log = podService.log(name, id);
+            String log = podService.log(podName, id);
             return new ResponseEntity<>(log, HttpStatus.OK);
         } catch (ApiException e) {
             return new ResponseEntity<>(HttpStatus.valueOf(e.getCode()));
         }
+    }
+
+    @CrossOrigin
+    @GetMapping("/shell")
+    public ResponseEntity<String> shell(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
+        String name = param.get("podName");
+        String log = podService.shell(name, id);
+        return new ResponseEntity<>(log, HttpStatus.OK);
     }
 }
