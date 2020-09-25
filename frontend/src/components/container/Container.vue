@@ -23,7 +23,6 @@
           <pod-log :podName="scope.row.name"></pod-log>
           <pod-shell
             :podName="scope.row.name"
-            :submitCallback="getPodList"
           ></pod-shell>
           <delete-pod
             :podName="scope.row.name"

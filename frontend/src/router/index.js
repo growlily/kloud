@@ -8,6 +8,7 @@ import Container from "@/components/container/Container";
 import Logging from "@/components/logging/Logging";
 import Private from "@/components/private/Private";
 import CourseItem from "@/components/course/CourseItem";
+import Terminal from "@/components/container/Terminal";
 
 Vue.use(Router)
 
@@ -21,6 +22,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login
+    },
+    {
+        path: '/terminal/:pod',
+        name: 'terminal',
+        component: Terminal
     },
     {
         path: '/home',
