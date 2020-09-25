@@ -3,9 +3,16 @@
     <el-row type="flex" justify="start">
       <create-pod :submitCallback="getPodList"></create-pod>
       <el-button icon="el-icon-refresh" @click="getPodList">刷新</el-button>
+      <el-input
+          placeholder="搜索"
+          prefix-icon="el-icon-search"
+          v-model="searchInput"
+          clearable
+          style="margin-left: 40%"
+      ></el-input>
     </el-row>
 
-    <el-table :data="podList" stripe style="width: 100%">
+    <el-table :data="searchResult" stripe style="width: 100%">
       <el-table-column prop="name" label="名称"> </el-table-column>
       <el-table-column prop="image" label="镜像"> </el-table-column>
       <el-table-column prop="memUsage" label="已用内存（MB）">
@@ -33,12 +40,27 @@ import CreatePod from "./components/CreatePod.vue";
 import PodLog from "./components/PodLog.vue";
 import PodShell from "./components/PodShell.vue";
 import DeletePod from "./components/DeletePod.vue";
+
 export default {
   name: "Container",
   data() {
     return {
+      searchInput: "",
       podList: [],
     };
+  },
+  computed: {
+    searchResult: function () {
+      let search = this.searchInput.toLowerCase();
+      if (search) {
+        return this.podList.filter((podInfo) => {
+          return Object.keys(podInfo).some((key) => {
+            return String(podInfo[key]).toLowerCase().indexOf(search) > -1;
+          });
+        });
+      }
+      return this.podList;
+    },
   },
   components: {
     CreatePod,
