@@ -6,6 +6,7 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Node;
 import kloud.backend.service.dto.KNodeInfo;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class NodeService {
      * 列出所有node信息
      * @return  包含各种信息的KNode类型实体
      */
+    @Cacheable(value = "nodeService", key = "knodeInfo")
     public List<KNodeInfo> list() {
         Metrics metrics = new Metrics();
         try {

@@ -10,6 +10,7 @@ import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
 import kloud.backend.service.dto.KPodInfo;
 import kloud.backend.util.UserNSUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PodService {
+
     public List<KPodInfo> listAll() {
         // the CoreV1Api loads default api-client from global configuration.
         CoreV1Api api = new CoreV1Api();
@@ -36,6 +38,7 @@ public class PodService {
         assert list != null;
         return list.getItems().stream().map(KPodInfo::new).collect(Collectors.toList());
     }
+
 
     public List<KPodInfo> listUser(String uid) {
         String namespace = UserNSUtil.toNS(uid);

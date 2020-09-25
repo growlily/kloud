@@ -8,6 +8,8 @@
                 bolder"
                                    @click="$router.replace({path: '/course'})">我的课程
         </el-button>
+            <span class="el-icon-arrow-right" v-if="isCourseItem()"></span>
+            <span style="margin-left: 6px" v-if="isCourseItem()">详细信息</span>
         </span></div>
         <router-view/>
         <div style="background-color: white;margin: 0 10px;
