@@ -83,7 +83,7 @@
                     courseName: '',
                 },
                 search: '',
-                show: true
+                show: true,
             }
         },
         computed: {

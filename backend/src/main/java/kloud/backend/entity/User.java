@@ -15,7 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -62,7 +64,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @ToString.Exclude
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "students")
-    private Set<Course> mycourse = new HashSet<>(); //学生参与的课程
+    private List<Course> myCourses = new ArrayList<>(); //学生参与的课程
 
     @Override
     public boolean equals(Object obj) {

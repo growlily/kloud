@@ -17,7 +17,6 @@ public class CourseService {
 
     @Resource
     private CourseRepository courseRepository;
-
     @CachePut(value = "courselist", key = "#addCourseVM.id")
     public List<Course> addCourse(@NotNull AddCourseVM addCourseVM) {
         Course course = new Course();

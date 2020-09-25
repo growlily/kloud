@@ -29,8 +29,6 @@ public class Task extends AbstractAuditingEntity implements Serializable {
 
     private Instant delayTime;  //延期时间
 
-    private Long courseId;  //所属课程id
-
     private String taskResource;    //课程资源路径
 
 }

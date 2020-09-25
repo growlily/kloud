@@ -7,7 +7,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,6 +40,12 @@ public class Course extends AbstractAuditingEntity implements Serializable {
     @JoinTable(name = "paas_courses_students",
             joinColumns = {@JoinColumn(name = "course_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "student_id", referencedColumnName = "id")})
-    private Set<User> students = new HashSet<>();   //参加课程的学生
+    private List<User> students = new ArrayList<>();   //参加课程的学生
+
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="course_id")
+    private List<Task> tasks = new ArrayList<>();
 
 }
