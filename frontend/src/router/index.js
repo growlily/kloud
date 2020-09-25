@@ -7,6 +7,7 @@ import Course from "@/components/course/Course";
 import Container from "@/components/container/Container";
 import Logging from "@/components/logging/Logging";
 import Private from "@/components/private/Private";
+import CourseItem from "@/components/course/CourseItem";
 
 Vue.use(Router)
 
@@ -30,7 +31,14 @@ const routes = [
             {
                 path: '/course',
                 name: 'course',
-                component: Course
+                component: Course,
+                children: [
+                    {
+                        path: '/course/:id',
+                        name: 'courseItem',
+                        component: CourseItem
+                    }
+                ]
             },
             {
                 path: '/container',

@@ -3,10 +3,15 @@
         <div style="text-align: left; margin-bottom: 10px;"><span
                 style="margin-left: 20px;font-size: 20px;
                 font-weight:
-                bolder">我的课程
+                bolder"><el-button type="text" style="font-size: 20px;
+                font-weight:
+                bolder"
+                                   @click="$router.replace({path: '/course'})">我的课程
+        </el-button>
         </span></div>
-
-        <div style="background-color: white;margin: 0 10px; padding-top: 20px;">
+        <router-view/>
+        <div style="background-color: white;margin: 0 10px;
+        padding-top: 20px;" v-if="!isCourseItem()">
             <div style="width: 300px; margin: auto auto 20px;">
                 <el-input placeholder="搜索"
                           prefix-icon="el-icon-search"
@@ -16,7 +21,7 @@
             <el-row style="margin-left: 20px">
                 <el-card v-for="item in coursesShow" :key="item.id"
                          class="card_item" body-style="padding: 0px;">
-                    <a href="#" style="text-decoration:none; "
+                    <a href="" style="text-decoration:none; "
                        @click="getCourse(item.id)">
                     <div class="cover">
                        <img src="../../assets/course-cover-1.png" alt="封面">
@@ -62,7 +67,7 @@
 </template>
 
 <script>
-    import * as courses from "core-js";
+
 
     export default {
         name: "CourseTeacher",
@@ -75,19 +80,27 @@
                     realName: '',
                     courseName: '',
                 },
-                search: ''
+                search: '',
+                show: true
             }
         },
         computed: {
-            coursesShow() {
-                var search = this.search
-                if(search === '' || search == null ) {
-                    return this.courses
-                }
-                else return courses.filter(function (course) {
-                    return course.courseName.indexOf(search) !== -1 ||
+            coursesShow: {
+                get() {
+                    var search = this.search
+                    if(search === '' || search == null ) {
+                        return this.courses
+                    }
+                    else return this.courses.filter(course => {
+                        return course.courseName.indexOf(search) !== -1 ||
                             course.semester.indexOf(search) !== -1
-                })
+                    })
+                },
+
+                set(v) {
+                    this.show = v
+                }
+
             }
         },
         mounted() {
@@ -120,9 +133,12 @@
                 this.dialogVisible = false
             },
             getCourse(id) {
-                alert(id)
+                this.$router.replace({path: "/course/" + id})
             },
-
+            isCourseItem() {
+                var reg = /^\/course\/\d+#?$/
+                return reg.test(this.$route.path)
+            }
         }
     }
 </script>
