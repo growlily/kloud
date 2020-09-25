@@ -1,4 +1,4 @@
-package kloud.backend.entity;
+package kloud.backend.service.dto;
 
 import io.kubernetes.client.custom.PodMetrics;
 import io.kubernetes.client.openapi.models.V1Pod;

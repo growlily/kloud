@@ -1,6 +1,6 @@
 package kloud.backend.controller;
 
-import kloud.backend.entity.KNodeInfo;
+import kloud.backend.service.dto.KNodeInfo;
 import kloud.backend.service.NodeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
