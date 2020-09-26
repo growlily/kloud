@@ -123,6 +123,7 @@
         width: 100%;
         padding-left: 0;
         background-color: white;
+        z-index: 9999;
     }
 
     .el_main {

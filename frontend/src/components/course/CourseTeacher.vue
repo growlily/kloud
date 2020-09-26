@@ -14,12 +14,13 @@
         <router-view/>
         <div style="background-color: white;margin: 0 10px;
         padding-top: 20px;" v-if="!isCourseItem()">
-            <div style="width: 300px; margin: auto auto 20px;">
+            <el-row type="flex" justify="start">
                 <el-input placeholder="搜索"
                           prefix-icon="el-icon-search"
                           v-model="search" type="text"
+                          style="margin-left: 25%; margin-right: 30%;"
                 ></el-input>
-            </div>
+            </el-row>
             <el-row style="margin-left: 20px">
                 <el-card v-for="item in coursesShow" :key="item.id"
                          class="card_item" body-style="padding: 0px;">
@@ -89,7 +90,7 @@
         computed: {
             coursesShow: {
                 get() {
-                    var search = this.search
+                    let search = this.search
                     if(search === '' || search == null ) {
                         return this.courses
                     }
@@ -106,7 +107,7 @@
             }
         },
         mounted() {
-            var _this = this
+            let _this = this
             let user = JSON.parse(window.sessionStorage.getItem('user'))
             let id = user.id
             this.$axios.post('/course/listCourses', {"id":id})

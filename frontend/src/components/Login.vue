@@ -45,7 +45,8 @@
                             session.setItem('id', user.id)
                             session.setItem('login', user.login)
                             session.setItem('realName', user.realName)
-                            session.setItem('email', user.userType)
+                            session.setItem('email', user.email)
+                            session.setItem('userType', user.userType)
                             session.setItem('user', JSON.stringify(user))
                             this.$router.replace({path: '/home'})
                         }

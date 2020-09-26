@@ -75,7 +75,7 @@ public class CacheConfig extends CachingConfigurerSupport{
 
         return RedisCacheManager
                 .builder(redisConnectionFactory)
-                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)))
+                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(15)))
                 .transactionAware()
                 .build();
 

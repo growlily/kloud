@@ -19,26 +19,28 @@
                     class="course_title">大数据技术综合实验
             </span><span>(2020
                 秋)</span></el-row>
-            <el-collapse v-model="activeNames">
+            <!--内容-->
+            <el-collapse v-model="activeNames" accordion>
+                <!--任务列表-->
                 <el-collapse-item name="1">
                     <template slot="title" >
                         <span class="collapse_title">任务列表</span>
                     </template>
-                    <div>这次不lorem了</div>
+                    <task-list></task-list>
                 </el-collapse-item>
+                <!--学生列表-->
                 <el-collapse-item name="2" >
                     <template slot="title">
                         <span class="collapse_title">学生列表</span>
                     </template>
-                    <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab architecto, atque commodi corporis culpa, dicta dignissimos eligendi ex facilis ipsa iure magni minus nisi rerum sed sint tenetur ut vitae.</div>
+
                 </el-collapse-item>
+                <!--容器列表-->
                 <el-collapse-item name="3" >
                     <template slot="title" >
                         <span class="collapse_title">容器列表</span>
                     </template>
-                    <div>
-                        这里要显示一堆容器哈哈哈哈
-                    </div>
+
                 </el-collapse-item>
             </el-collapse>
         </div>
@@ -46,18 +48,30 @@
 </template>
 
 <script>
+    import TaskList from "@/components/course/components/TaskList";
     export default {
         name: "CourseItem",
+        components: {TaskList},
         data() {
             return {
-                activeNames: ['1']
+                activeNames: '1'
             }
         },
         methods: {
             deleteCourse() {
-                let courseId = this.$route.params.id
-                console.log(courseId)
-            }
+                this.$confirm("确认删除？")
+                .then(() => {
+                    let courseId = this.$route.params.id
+                    let teacherId = window.sessionStorage.getItem('id')
+                    this.$axios.post("/course/deleteCourse", {'id': courseId,
+                        'teacherId': teacherId})
+                        .then(() => {
+                            this.$router.replace({path: '/course'})
+                            window.location.reload()
+                        })
+                })
+            },
+
         }
     }
 </script>
@@ -79,4 +93,5 @@
         font-weight: bold;
         color: #9B9DA2;
     }
+
 </style>
