@@ -33,4 +33,11 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getAllCoursesByTeacherId(Long.valueOf(Long.valueOf(teacherId))));
     }
 
+    @CrossOrigin
+    @PostMapping("/deleteCourse")
+    public ResponseEntity<Void> deleteCourse(@RequestBody Map<String, String> params) {
+        courseService.deleteCourseById(Long.valueOf(params.get("id")), Long.valueOf(params.get("teacherId")));
+        return ResponseEntity.ok().build();
+    }
+
 }

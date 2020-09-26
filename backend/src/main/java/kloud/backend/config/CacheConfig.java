@@ -37,7 +37,7 @@ public class CacheConfig extends CachingConfigurerSupport{
     private LettuceConnectionFactory lettuceConnectionFactory;
 
     /**
-     * 启动一次清理所有缓存
+     * 程序启动时清理所有缓存
      */
     @PostConstruct
     void flushAll() {

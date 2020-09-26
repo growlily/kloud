@@ -4,6 +4,7 @@ import kloud.backend.controller.vm.AddCourseVM;
 import kloud.backend.entity.Course;
 import kloud.backend.repository.CourseRepository;
 import kloud.backend.util.TimeUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,9 @@ public class CourseService {
         return courseRepository.findAllByTeacherId(teacherId);
     }
 
+    @CacheEvict(value = "courselist", key = "#teacherId")
+    public void deleteCourseById(Long id, Long teacherId) {
+        courseRepository.deleteById(id);
+    }
 
 }

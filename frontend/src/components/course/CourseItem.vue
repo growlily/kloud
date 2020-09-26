@@ -2,13 +2,14 @@
     <div>
         <div class="course_item_main">
             <div style="float: left;">
-            <el-button type="primary" style="font-size: 16px; "><span
-                    class="el-icon-back" @click.native="$router.replace({path:
-                    '/course'})"></span>返回
+            <el-button type="primary" style="font-size: 16px;"
+                       @click="$router.replace({path: '/course'})"><span
+                    class="el-icon-back"></span>返回
             </el-button>
             </div>
             <div style="float:right;">
-            <el-button type="danger" style="font-size: 16px;"><span
+            <el-button type="danger" style="font-size: 16px;"
+                       @click="deleteCourse"><span
                     class="el-icon-delete"></span>
                 删除
             </el-button>
@@ -53,7 +54,10 @@
             }
         },
         methods: {
-
+            deleteCourse() {
+                let courseId = this.$route.params.id
+                console.log(courseId)
+            }
         }
     }
 </script>

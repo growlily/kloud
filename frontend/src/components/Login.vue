@@ -40,18 +40,16 @@
                     .then(successResponse => {
                         if (successResponse.data &&
                             successResponse.data.login != undefined) {
-                            window.sessionStorage.setItem('user',
-                                JSON.stringify(successResponse.data))
+                            let user = successResponse.data
+                            let session = window.sessionStorage
+                            session.setItem('id', user.id)
+                            session.setItem('login', user.login)
+                            session.setItem('realName', user.realName)
+                            session.setItem('email', user.userType)
+                            session.setItem('user', JSON.stringify(user))
                             this.$router.replace({path: '/home'})
                         }
 
-                        // alert(successResponse.data.realName)
-                        // if (successResponse.data.code === 200) {
-                        //     _this.$store.commit('login', _this.loginForm)
-                        //     var path = this.$route.query.redirect
-                        //     this.$router.replace({path: path === '/' || path
-                        //         === undefined ? '/index' : path})
-                        // }
                     })
                 // .catch(failResponse => {
                 //     alert(failResponse)
