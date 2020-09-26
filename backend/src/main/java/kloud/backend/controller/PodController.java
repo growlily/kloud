@@ -32,12 +32,12 @@ public class PodController {
 
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody PodCreateParam podCreateParam) {
-        String result = podService.create(podCreateParam);
-        if (result == null) {
-            return new ResponseEntity<>("creation failed", HttpStatus.OK);
+    public ResponseEntity<Void> create(@RequestBody PodCreateParam podCreateParam) {
+        int result = podService.create(podCreateParam);
+        if (result != 200) {
+            return new ResponseEntity<>(HttpStatus.valueOf(result));
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin

@@ -74,11 +74,16 @@ public class PodService {
         return coreApi.readNamespacedPodLog(podName, namespace, null, false, null, null, null, null, null, null, null);
     }
 
-    //create pod. return pod name if success, else null
-    public String create(PodCreateParam param) {
+    //create pod. return status code
+    public int create(PodCreateParam param) {
         CoreV1Api api = new CoreV1Api();
         String image = param.getParam().getImage();
-        String dnsLabel = image.toLowerCase().replace('/', '-').replace(':', '-');
+        String dnsLabel;
+        if (param.getParam().getPrefix().equals(""))
+            dnsLabel = image.toLowerCase().replace('/', '-').replace(':', '-');
+        else {
+            dnsLabel = param.getParam().getPrefix();
+        }
         List<V1EnvVar> envVarList = param.getParam().getEnvVarList()
                 .stream().filter(envVar -> envVar.getName() != null && !envVar.getName().equals(""))
                 .map(envVar -> {
@@ -94,18 +99,18 @@ public class PodService {
 
         V1Pod pod = new V1Pod();
         pod.spec(new V1PodSpec().containers(Collections.singletonList(container)));
-        pod.metadata(new V1ObjectMeta().generateName(dnsLabel));
+        pod.metadata(new V1ObjectMeta().generateName(dnsLabel + "-"));
         String namespace = UserNSUtil.toNS(param.getId());
         try {
             V1Pod result = api.createNamespacedPod(namespace, pod, null, null, null);
-            return Objects.requireNonNull(result.getMetadata()).getName();
+            return 200;
         } catch (ApiException e) {
             System.err.println("Exception when calling CoreV1Api#createNamespacedPod");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
             e.printStackTrace();
-            return null;
+            return e.getCode();
         }
     }
 

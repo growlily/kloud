@@ -9,5 +9,6 @@ import java.util.List;
 public class PodParam {
     @NotNull
     private String image;
+    private String prefix;
     private List<envVar> envVarList;
 }
