@@ -7,10 +7,10 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
 import kloud.backend.service.dto.KPodInfo;
+import kloud.backend.service.dto.podCreate.PodCreateParam;
 import kloud.backend.util.UserNSUtil;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -74,26 +74,43 @@ public class PodService {
         return coreApi.readNamespacedPodLog(podName, namespace, null, false, null, null, null, null, null, null, null);
     }
 
-    //create pod. return pod name if success, else null
-    public String create(@NotNull String image, String uid) {
+    //create pod. return status code
+    public int create(PodCreateParam param) {
         CoreV1Api api = new CoreV1Api();
-        String dnsLabel = image.toLowerCase().replace('/', '-').replace(':', '-');
-        V1Container container = new V1Container().image(image).name(dnsLabel);
+        String image = param.getParam().getImage();
+        String dnsLabel;
+        if (param.getParam().getPrefix().equals(""))
+            dnsLabel = image.toLowerCase().replace('/', '-').replace(':', '-');
+        else {
+            dnsLabel = param.getParam().getPrefix();
+        }
+        List<V1EnvVar> envVarList = param.getParam().getEnvVarList()
+                .stream().filter(envVar -> envVar.getName() != null && !envVar.getName().equals(""))
+                .map(envVar -> {
+                    V1EnvVar v1EnvVar = new V1EnvVar().name(envVar.getName());
+                    if (envVar.getValue() != null && !envVar.getValue().equals(""))
+                        v1EnvVar.value(envVar.getValue());
+                    return v1EnvVar;
+                }).collect(Collectors.toList());
+        V1Container container = new V1Container()
+                .image(image).name(dnsLabel)
+                .stdin(true).tty(true)
+                .env(envVarList);
 
         V1Pod pod = new V1Pod();
         pod.spec(new V1PodSpec().containers(Collections.singletonList(container)));
-        pod.metadata(new V1ObjectMeta().generateName(dnsLabel));
-        String namespace = UserNSUtil.toNS(uid);
+        pod.metadata(new V1ObjectMeta().generateName(dnsLabel + "-"));
+        String namespace = UserNSUtil.toNS(param.getId());
         try {
             V1Pod result = api.createNamespacedPod(namespace, pod, null, null, null);
-            return Objects.requireNonNull(result.getMetadata()).getName();
+            return 200;
         } catch (ApiException e) {
             System.err.println("Exception when calling CoreV1Api#createNamespacedPod");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
             e.printStackTrace();
-            return null;
+            return e.getCode();
         }
     }
 

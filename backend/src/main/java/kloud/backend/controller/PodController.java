@@ -3,6 +3,7 @@ package kloud.backend.controller;
 import io.kubernetes.client.openapi.ApiException;
 import kloud.backend.service.PodService;
 import kloud.backend.service.dto.KPodInfo;
+import kloud.backend.service.dto.podCreate.PodCreateParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,20 +32,12 @@ public class PodController {
 
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody Map<String, String> param) {
-        String image = param.get("image");
-        if (image == null) {
-            return new ResponseEntity<>("Missing param \"image\"", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Void> create(@RequestBody PodCreateParam podCreateParam) {
+        int result = podService.create(podCreateParam);
+        if (result != 200) {
+            return new ResponseEntity<>(HttpStatus.valueOf(result));
         }
-        String id = param.get("id");
-        if (id == null) {
-            return new ResponseEntity<>("Missing param \"id\"", HttpStatus.BAD_REQUEST);
-        }
-        String result = podService.create(image, id);
-        if (result == null) {
-            return new ResponseEntity<>("creation failed", HttpStatus.OK);
-        }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin
