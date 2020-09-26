@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 public class WsConnection implements Runnable {
@@ -24,15 +23,17 @@ public class WsConnection implements Runnable {
     private final String podName;
     private final String namespace;
 
-    private final ConsoleSize consoleSize;
     private Boolean tryBash = false;
+    private final String cols;
+    private final String rows;
 
     public WsConnection(Map<String, String> params, WebSocketSession session) {
         this.session = session;
         exec = new Exec();
         namespace = UserNSUtil.toNS(params.get("id"));
         podName = params.get("podName");
-        consoleSize = new ConsoleSize(params.get("cols"), params.get("rows"));
+        cols = params.get("cols");
+        rows = params.get("rows");
     }
 
     @Override
@@ -49,17 +50,11 @@ public class WsConnection implements Runnable {
     private void startProcess(String shellPath) {
         boolean initValid = true;
         try {
-            Process proc = exec.exec(namespace, podName, new String[]{shellPath}, null, true, true);
+            String setSize = String.format("export COLUMNS=%s LINES=%s;", cols, rows);
+            Process proc = exec.exec(namespace, podName,
+                    new String[]{shellPath, "-c", setSize + shellPath}, null, true, true);
             outputStream = proc.getOutputStream();
             InputStream inputStream = proc.getInputStream();
-            String width = Optional.ofNullable(consoleSize.getCols()).map(s -> "COLUMNS=" + s).orElse("");
-            String height = Optional.ofNullable(consoleSize.getRows()).map(s -> "LINES=" + s).orElse("");
-            String export = "";
-            if (!"".equals(width + height)) {
-                export = "export " + width + height + ";";
-            }
-            String cmdArgs = export + shellPath + "\nclear\n";
-            outputStream.write(cmdArgs.getBytes());
             try {
                 while (true) {
                     byte[] data = new byte[1024];

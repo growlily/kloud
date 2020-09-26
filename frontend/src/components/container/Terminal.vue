@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <h2>{{ this.podName }}</h2>
-    <div ref="xtermContainer" class="xtermContainer"></div>
+  <div class="container" style="width: 100%; height: 100%; position: absolute">
+    <h2 style="height: 3%">{{ this.podName }}</h2>
+    <div ref="xtermContainer" class="xtermContainer" style="height: 90%"></div>
   </div>
 </template>
 <script>
@@ -22,21 +22,22 @@ export default {
     this.podName = this.$route.params.pod;
     const login = JSON.parse(window.sessionStorage.getItem("user")).login;
     const baseUrl = this.$axios.defaults.baseURL.replace("http://", "");
-    const WS_URL = `ws://${baseUrl}/pod/shell?id=${login}&podName=${this.podName}`;
-    this.socket = new WebSocket(WS_URL);
-    this.socket.onopen = this.onSocketOpen;
-    this.socket.onclose = this.onSocketClose;
 
     this.xterm = new Terminal({
       cursorBlink: true,
+      convertEol: true,
     });
 
-    const attachAddon = new AttachAddon(this.socket);
-    this.xterm.loadAddon(attachAddon);
     const fitAddon = new FitAddon();
     this.xterm.loadAddon(fitAddon);
     this.xterm.open(this.$refs.xtermContainer);
     fitAddon.fit();
+    const WS_URL = `ws://${baseUrl}/pod/shell?id=${login}&podName=${this.podName}&cols=${this.xterm.cols}&rows=${this.xterm.rows}`;
+    this.socket = new WebSocket(WS_URL);
+    this.socket.onopen = this.onSocketOpen;
+    this.socket.onclose = this.onSocketClose;
+    const attachAddon = new AttachAddon(this.socket);
+    this.xterm.loadAddon(attachAddon);
     this.xterm.focus();
   },
   beforeDestroy() {
