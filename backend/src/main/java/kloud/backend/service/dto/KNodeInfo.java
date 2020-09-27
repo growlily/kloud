@@ -6,11 +6,10 @@ import lombok.Data;
 
 import java.util.Objects;
 
+import static kloud.backend.config.Constants.*;
+
 @Data
 public class KNodeInfo {
-    private static final String CPU = "cpu";
-    private static final String MEMORY = "memory";
-    private static final int MB = 1024 * 1024;
     private String hostname;
     private int cpuCores;
     private int cpuPercent;
@@ -31,9 +30,9 @@ public class KNodeInfo {
         cpuPercent = (int) (cpuUsage * 100 / cpuTotal);
 
         double memTotal = node.getStatus().getCapacity().get(MEMORY).getNumber().doubleValue();
-        this.memTotal = (int) (memTotal / MB);
+        this.memTotal = (int) (memTotal / MiB);
         double memUsage = metrics.getUsage().get(MEMORY).getNumber().doubleValue();
-        this.memUsage = (int) (memUsage / MB);
+        this.memUsage = (int) (memUsage / MiB);
         this.memPercent = (int) (memUsage * 100 / memTotal);
     }
 
