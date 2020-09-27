@@ -25,7 +25,7 @@
                 <el-card v-for="item in coursesShow" :key="item.id"
                          class="card_item" body-style="padding: 0px;">
                     <a href="" style="text-decoration:none; "
-                       @click="getCourse(item.id)">
+                       @click="getCourse(item)">
                     <div class="cover">
                        <img src="../../assets/course-cover-1.png" alt="封面">
                     </div>
@@ -85,6 +85,7 @@
                 },
                 search: '',
                 show: true,
+                courseItem: ''
             }
         },
         computed: {
@@ -135,8 +136,10 @@
                 this.courseName = ''
                 this.dialogVisible = false
             },
-            getCourse(id) {
-                this.$router.replace({path: "/course/" + id})
+            getCourse(item) {
+                window.sessionStorage.setItem('courseName', item.courseName)
+                window.sessionStorage.setItem('semester', item.semester)
+                this.$router.replace({path: "/course/" + item.id})
             },
             isCourseItem() {
                 var reg = /^\/course\/\d+#?$/

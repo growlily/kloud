@@ -16,9 +16,8 @@
             </div>
             <div style="width: 100%; height: 50px; "></div> <!--背景填充-->
             <el-row style="margin-bottom: 40px;"><span
-                    class="course_title">大数据技术综合实验
-            </span><span>(2020
-                秋)</span></el-row>
+                    class="course_title">{{courseName}}
+            </span><span>({{semester}})</span></el-row>
             <!--内容-->
             <el-collapse v-model="activeNames" accordion>
                 <!--任务列表-->
@@ -54,7 +53,9 @@
         components: {TaskList},
         data() {
             return {
-                activeNames: '1'
+                activeNames: '',
+                courseName: window.sessionStorage.getItem('courseName'),
+                semester: window.sessionStorage.getItem('semester')
             }
         },
         methods: {
