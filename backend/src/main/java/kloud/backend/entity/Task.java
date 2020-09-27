@@ -36,6 +36,8 @@ public class Task extends AbstractAuditingEntity implements Serializable {
 
     private String taskResource;    //课程资源路径
 
+    private String taskResourceName = "无";
+
     @NotNull
     private Long courseId;  //所属课程id
 
