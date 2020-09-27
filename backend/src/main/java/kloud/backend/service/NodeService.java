@@ -18,7 +18,6 @@ public class NodeService {
      * 列出所有node信息
      * @return  包含各种信息的KNode类型实体
      */
-    @Cacheable(value = "nodeService", key = "knodeInfo")
     public List<KNodeInfo> list() {
         Metrics metrics = new Metrics();
         try {

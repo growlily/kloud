@@ -21,7 +21,6 @@ public class UserService {
     /**
      * The very first version of log-in service.
      */
-    @Cacheable(value = "users")
     public Optional<User> login(String username, String password) {
         return userRepository.findOneByLoginAndPassword(username, password);
     }

@@ -2,7 +2,9 @@ package kloud.backend;
 
 import kloud.backend.controller.vm.ChangeInfoVM;
 import kloud.backend.controller.vm.ChangePwdVM;
+import kloud.backend.entity.Course;
 import kloud.backend.entity.User;
+import kloud.backend.repository.CourseRepository;
 import kloud.backend.repository.UserRepository;
 import kloud.backend.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @SpringBootTest
@@ -20,6 +23,9 @@ public class UserTest {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CourseRepository courseRepository;
 
     @Test
     public void  addTest() {
@@ -92,6 +98,16 @@ public class UserTest {
         changePwdVM.setId(1L);
         changePwdVM.setPassword("ayc1999");
         userService.changePwd(changePwdVM);
+    }
+
+    @Test
+    public void test3() {
+        Long courseId = 1L;
+        System.out.println(courseId);
+        Course course = courseRepository.findOneById(courseId).get();
+        System.out.println(course);
+        User user = userRepository.findOneById(course.getTeacherId()).get();
+        System.out.println(user);
     }
 
 }

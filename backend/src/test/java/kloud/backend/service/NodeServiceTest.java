@@ -13,6 +13,7 @@ class NodeServiceTest {
     @Test
     void listWithMetrics() {
         System.out.println(nodeService.list());
+        System.out.println(nodeService.list());
     }
 
     @Test
