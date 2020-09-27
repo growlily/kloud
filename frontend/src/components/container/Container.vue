@@ -15,7 +15,7 @@
     <el-table :data="searchResult" stripe style="width: 100%">
       <el-table-column prop="name" label="名称"> </el-table-column>
       <el-table-column prop="image" label="镜像"> </el-table-column>
-      <el-table-column prop="memUsage" label="已用内存（MB）">
+      <el-table-column prop="memUsage" label="内存占用（MiB）">
       </el-table-column>
       <el-table-column prop="status" label="状态"> </el-table-column>
       <el-table-column prop="action" label="操作" width="240%">

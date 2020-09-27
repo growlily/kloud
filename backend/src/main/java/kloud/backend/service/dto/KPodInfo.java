@@ -3,16 +3,13 @@ package kloud.backend.service.dto;
 import io.kubernetes.client.custom.ContainerMetrics;
 import io.kubernetes.client.custom.PodMetrics;
 import io.kubernetes.client.openapi.models.V1Pod;
+import kloud.backend.config.Constants;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Objects;
-
 @Data
 public class KPodInfo {
-    private static final String CPU = "cpu";
-    private static final String MEMORY = "memory";
-    private static final int MB = 1024 * 1024;
 
     private String name;
     private String image;
@@ -33,8 +30,8 @@ public class KPodInfo {
             List<ContainerMetrics> list = metrics.getContainers();
             //不一定有在运行的容器？
             if (!list.isEmpty()) {
-                double memUsage = list.get(0).getUsage().get(MEMORY).getNumber().doubleValue();
-                this.memUsage = (int) (memUsage / MB);
+                double memUsage = list.get(0).getUsage().get(Constants.MEMORY).getNumber().doubleValue();
+                this.memUsage = (int) (memUsage / Constants.MiB);
             }
         }
     }
