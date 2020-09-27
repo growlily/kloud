@@ -9,6 +9,8 @@ public class PodCreateParam {
     @NotNull
     private String id;
     @NotNull
+    private String course;
+    @NotNull
     private PodParam param;
 
 }

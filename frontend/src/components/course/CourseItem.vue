@@ -40,7 +40,7 @@
                     <template slot="title" >
                         <span class="collapse_title">容器列表</span>
                     </template>
-
+                    <container-impl :course="$route.params.id"></container-impl>
                 </el-collapse-item>
             </el-collapse>
         </div>
@@ -49,9 +49,10 @@
 
 <script>
     import TaskList from "@/components/course/components/TaskList";
+    import ContainerImpl from "@/components/container/ContainerImpl";
     export default {
         name: "CourseItem",
-        components: {TaskList},
+        components: {ContainerImpl, TaskList},
         data() {
             return {
                 activeNames: '1'

@@ -11,13 +11,7 @@ public class NamespaceServiceTest {
     private NamespaceService namespaceService;
 
     @Test
-    void create() {
-        String[] uids = {"23684279", "068492", "666", "54310"};
-
-        for (String item : uids) {
-            namespaceService.createUserNamespace(item);
-            namespaceService.deleteUserNamespace(item);
-        }
-
+    void get() {
+        System.out.println(namespaceService.getQuota("kusr17373189"));
     }
 }

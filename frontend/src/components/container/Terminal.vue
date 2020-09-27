@@ -19,6 +19,7 @@ export default {
   },
   xterm: null,
   mounted() {
+    const course = this.$route.params.course;
     this.podName = this.$route.params.pod;
     const login = JSON.parse(window.sessionStorage.getItem("user")).login;
     const baseUrl = this.$axios.defaults.baseURL.replace("http://", "");
@@ -32,7 +33,7 @@ export default {
     this.xterm.loadAddon(fitAddon);
     this.xterm.open(this.$refs.xtermContainer);
     fitAddon.fit();
-    const WS_URL = `ws://${baseUrl}/pod/shell?id=${login}&podName=${this.podName}&cols=${this.xterm.cols}&rows=${this.xterm.rows}`;
+    const WS_URL = `ws://${baseUrl}/pod/shell?id=${login}&course=${course}&podName=${this.podName}&cols=${this.xterm.cols}&rows=${this.xterm.rows}`;
     this.socket = new WebSocket(WS_URL);
     this.socket.onopen = this.onSocketOpen;
     this.socket.onclose = this.onSocketClose;
