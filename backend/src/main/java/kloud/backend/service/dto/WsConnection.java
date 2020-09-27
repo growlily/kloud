@@ -2,7 +2,7 @@ package kloud.backend.service.dto;
 
 import io.kubernetes.client.Exec;
 import io.kubernetes.client.openapi.ApiException;
-import kloud.backend.util.UserNSUtil;
+import kloud.backend.util.NamespaceUtil;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -30,7 +30,7 @@ public class WsConnection implements Runnable {
     public WsConnection(Map<String, String> params, WebSocketSession session) {
         this.session = session;
         exec = new Exec();
-        namespace = UserNSUtil.toNS(params.get("id"));
+        namespace = NamespaceUtil.getNS(params.get("id"), params.get("course"));
         podName = params.get("podName");
         cols = params.get("cols");
         rows = params.get("rows");

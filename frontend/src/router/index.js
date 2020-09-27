@@ -25,7 +25,7 @@ const routes = [
         component: Login
     },
     {
-        path: '/terminal/:pod',
+        path: '/terminal/:course/:pod',
         name: 'terminal',
         component: Terminal
     },

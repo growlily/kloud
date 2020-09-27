@@ -17,6 +17,7 @@
 <script>
 export default {
   props: {
+    course: String,
     podName: String,
     submitCallback: Function,
   },
@@ -28,12 +29,15 @@ export default {
   methods: {
     onSubmit() {
       let user = JSON.parse(window.sessionStorage.getItem("user"));
+      let course = this.$props.course;
       this.$axios
-        .post("/pod/delete", {
-          id: user.login,
-          podName: this.$props.podName,
-        })
-        .then(() => {});
+          .post("/pod/delete", {
+            id: user.login,
+            course: course,
+            podName: this.$props.podName,
+          })
+          .then(() => this.$message.info("正在删除"))
+          .catch((err) => this.$message.error(err.message));
       this.dialogVisible = false;
       this.$props.submitCallback();
     },

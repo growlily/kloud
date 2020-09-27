@@ -57,6 +57,7 @@
 <script>
 export default {
   props: {
+    course: String,
     submitCallback: Function,
   },
   data() {
@@ -97,6 +98,7 @@ export default {
       this.$axios
         .post("/pod/create", {
           id: user.login,
+          course: this.$props.course,
           param: this.form,
         })
         .then(() =>

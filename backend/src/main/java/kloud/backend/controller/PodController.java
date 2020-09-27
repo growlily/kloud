@@ -26,8 +26,8 @@ public class PodController {
 
     @CrossOrigin
     @GetMapping("/list")
-    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam String id) {
-        return new ResponseEntity<>(podService.listUser(id), HttpStatus.OK);
+    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam String id, @RequestParam String course) {
+        return new ResponseEntity<>(podService.listUser(id, course), HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -52,7 +52,7 @@ public class PodController {
             return new ResponseEntity<>("Missing param \"id\"", HttpStatus.BAD_REQUEST);
         }
         try {
-            String result = podService.delete(podName, id);
+            String result = podService.delete(podName, id, param.get("course"));
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (ApiException e) {
             e.printStackTrace();
@@ -63,10 +63,10 @@ public class PodController {
     @CrossOrigin
 
     @GetMapping("/logt")
-    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestParam String podName) {
+    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestParam String podName, @RequestParam String course) {
         try {
 
-            String log = podService.log(podName, id);
+            String log = podService.log(podName, id, course);
             return new ResponseEntity<>(log, HttpStatus.OK);
         } catch (ApiException e) {
             return new ResponseEntity<>(HttpStatus.valueOf(e.getCode()));

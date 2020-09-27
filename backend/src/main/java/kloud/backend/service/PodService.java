@@ -8,9 +8,10 @@ import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
 import kloud.backend.service.dto.KPodInfo;
 import kloud.backend.service.dto.podCreate.PodCreateParam;
-import kloud.backend.util.UserNSUtil;
+import kloud.backend.util.NamespaceUtil;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class PodService {
+
+    @Resource
+    private NamespaceService namespaceService;
 
     public List<KPodInfo> listAll() {
         // the CoreV1Api loads default api-client from global configuration.
@@ -36,8 +40,8 @@ public class PodService {
     }
 
 
-    public List<KPodInfo> listUser(String uid) {
-        String namespace = UserNSUtil.toNS(uid);
+    public List<KPodInfo> listUser(String uid, String course) {
+        String namespace = NamespaceUtil.getNS(uid, course);
         CoreV1Api api = new CoreV1Api();
         try {
             return api.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null)
@@ -68,9 +72,9 @@ public class PodService {
         return Optional.empty();
     }
 
-    public String log(String podName, String uid) throws ApiException {
+    public String log(String podName, String uid, String course) throws ApiException {
         CoreV1Api coreApi = new CoreV1Api();
-        String namespace = UserNSUtil.toNS(uid);
+        String namespace = NamespaceUtil.getNS(uid, course);
         return coreApi.readNamespacedPodLog(podName, namespace, null, false, null, null, null, null, null, null, null);
     }
 
@@ -100,9 +104,10 @@ public class PodService {
         V1Pod pod = new V1Pod();
         pod.spec(new V1PodSpec().containers(Collections.singletonList(container)));
         pod.metadata(new V1ObjectMeta().generateName(dnsLabel + "-"));
-        String namespace = UserNSUtil.toNS(param.getId());
+        String namespace = NamespaceUtil.getNS(param.getId(), param.getCourse());
+        namespaceService.ensureNamespace(namespace);
         try {
-            V1Pod result = api.createNamespacedPod(namespace, pod, null, null, null);
+            api.createNamespacedPod(namespace, pod, null, null, null);
             return 200;
         } catch (ApiException e) {
             System.err.println("Exception when calling CoreV1Api#createNamespacedPod");
@@ -114,9 +119,9 @@ public class PodService {
         }
     }
 
-    public String delete(String podName, String uid) throws ApiException {
+    public String delete(String podName, String uid, String course) throws ApiException {
         CoreV1Api api = new CoreV1Api();
-        String namespace = UserNSUtil.toNS(uid);
+        String namespace = NamespaceUtil.getNS(uid, course);
 
         api.deleteNamespacedPod(podName, namespace, null, null, null, null, null, null);
         return "success";

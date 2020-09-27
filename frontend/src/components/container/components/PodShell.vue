@@ -7,6 +7,7 @@
 export default {
   props: {
     podName: String,
+    course: String
   },
   data() {
     return {
@@ -14,7 +15,7 @@ export default {
     };
   },
   mounted() {
-    this.termLink = `terminal/${this.$props.podName}`
+    this.termLink = `/terminal/${this.$props.course}/${this.$props.podName}`
   },
 };
 </script>
