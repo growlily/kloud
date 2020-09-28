@@ -19,7 +19,7 @@ public class CourseService {
     @Resource
     private CourseRepository courseRepository;
 
-    @CachePut(value = "courselist", key = "#addCourseVM.id")
+//    @CachePut(value = "courselist", key = "#addCourseVM.id")
     public List<Course> addCourse(@NotNull AddCourseVM addCourseVM) {
         Course course = new Course();
         course.setCourseName(addCourseVM.getCourseName());
@@ -30,13 +30,13 @@ public class CourseService {
         return courseRepository.findAllByTeacherId(addCourseVM.getId());
     }
 
-    @Cacheable(value = "courselist", key = "#teacherId")
+//    @Cacheable(value = "courselist", key = "#teacherId")
     public List<Course> getAllCoursesByTeacherId(Long teacherId) {
 
         return courseRepository.findAllByTeacherId(teacherId);
     }
 
-    @CacheEvict(value = "courselist", key = "#teacherId")
+//    @CacheEvict(value = "courselist", key = "#teacherId")
     public void deleteCourseById(Long id, Long teacherId) {
         courseRepository.deleteById(id);
     }

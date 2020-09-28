@@ -2,6 +2,7 @@ package kloud.backend.controller;
 
 import kloud.backend.entity.Task;
 import kloud.backend.service.TaskService;
+import kloud.backend.service.dto.StudentTaskDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,12 @@ public class TaskController {
     public ResponseEntity<List<Task>> getAllTaskByCourseId(@RequestBody Map<String, String> params) {
         List<Task> tasks = taskService.getAllTasksByCourseId(Long.valueOf(params.get("courseId")));
         return ResponseEntity.ok(tasks);
+    }
+
+    @CrossOrigin
+    @GetMapping("/getOne")
+    public ResponseEntity<Task> getOneTaskById(@RequestParam Long id) {
+        return ResponseEntity.ok(taskService.getOneTaskById(id));
     }
 
     @CrossOrigin
@@ -62,6 +69,13 @@ public class TaskController {
     public ResponseEntity<Void> updateTaskWithoutResource(@RequestBody Map<String, String> params) {
         taskService.updateTask(params);
         return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin
+    @GetMapping("/getAllStudentTasks")
+    public ResponseEntity<List<StudentTaskDTO>> getAllStudentTasks(@RequestParam Long id) {
+
+        return ResponseEntity.ok(taskService.getAllStudentTasks(id));
     }
 
 }

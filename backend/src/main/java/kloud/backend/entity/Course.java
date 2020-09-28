@@ -34,18 +34,6 @@ public class Course extends AbstractAuditingEntity implements Serializable {
 
     private Long total = 0L;
 
-    @ToString.Exclude
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "paas_courses_students",
-            joinColumns = {@JoinColumn(name = "course_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "student_id", referencedColumnName = "id")})
-    private List<User> students = new ArrayList<>();   //参加课程的学生
 
-//    @ToString.Exclude
-//    @JsonIgnore
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name="course_id")
-//    private List<Task> tasks = new ArrayList<>();
 
 }

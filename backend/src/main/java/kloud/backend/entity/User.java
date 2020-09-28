@@ -61,11 +61,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     private Integer userType = 0;   //1为教师，2为管理员
 
-    @ToString.Exclude
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "students")
-    private List<Course> myCourses = new ArrayList<>(); //学生参与的课程
-
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {

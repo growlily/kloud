@@ -8,6 +8,7 @@ import kloud.backend.entity.User;
 import kloud.backend.repository.CourseRepository;
 import kloud.backend.repository.TaskRepository;
 import kloud.backend.repository.UserRepository;
+import kloud.backend.service.dto.StudentTaskDTO;
 import kloud.backend.util.MinioUtil;
 import kloud.backend.util.TimeUtils;
 import org.springframework.stereotype.Service;
@@ -115,6 +116,15 @@ public class TaskService {
         task.setEndTime(TimeUtils.parseTime(endTime));
         task.setDelayTime(TimeUtils.parseTime(delayTime));
         taskRepository.save(task);
+    }
+
+
+    public List<StudentTaskDTO> getAllStudentTasks(Long id) {
+        return taskRepository.getAllTasksByStudentId(id);
+    }
+
+    public Task getOneTaskById(Long id) {
+        return taskRepository.findById(id).get();
     }
 
 }

@@ -15,7 +15,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     void deleteById(Long id);
 
-    @Cacheable(value = "courseRepositoryForTaskUseOnly", key = "#id")
+//    @Cacheable(value = "courseRepositoryForTaskUseOnly", key = "#id")
     Optional<Course> findOneById(Long id);
+
+
 
 }
