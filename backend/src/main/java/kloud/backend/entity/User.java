@@ -15,6 +15,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *  A user.
@@ -56,6 +60,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String email;
 
     private Integer userType = 0;   //1为教师，2为管理员
+
+    @ToString.Exclude
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "students")
+    private List<Course> myCourses = new ArrayList<>(); //学生参与的课程
 
     @Override
     public boolean equals(Object obj) {

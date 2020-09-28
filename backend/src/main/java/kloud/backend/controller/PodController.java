@@ -3,6 +3,7 @@ package kloud.backend.controller;
 import io.kubernetes.client.openapi.ApiException;
 import kloud.backend.service.PodService;
 import kloud.backend.service.dto.KPodInfo;
+import kloud.backend.service.dto.podCreate.PodCreateParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,26 +26,18 @@ public class PodController {
 
     @CrossOrigin
     @GetMapping("/list")
-    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam String id) {
-        return new ResponseEntity<>(podService.listUser(id), HttpStatus.OK);
+    public ResponseEntity<List<KPodInfo>> listUser(@RequestParam String id, @RequestParam String course) {
+        return new ResponseEntity<>(podService.listUser(id, course), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody Map<String, String> param) {
-        String image = param.get("image");
-        if (image == null) {
-            return new ResponseEntity<>("Missing param \"image\"", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Void> create(@RequestBody PodCreateParam podCreateParam) {
+        int result = podService.create(podCreateParam);
+        if (result != 200) {
+            return new ResponseEntity<>(HttpStatus.valueOf(result));
         }
-        String id = param.get("id");
-        if (id == null) {
-            return new ResponseEntity<>("Missing param \"id\"", HttpStatus.BAD_REQUEST);
-        }
-        String result = podService.create(image, id);
-        if (result == null) {
-            return new ResponseEntity<>("creation failed", HttpStatus.OK);
-        }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -59,7 +52,7 @@ public class PodController {
             return new ResponseEntity<>("Missing param \"id\"", HttpStatus.BAD_REQUEST);
         }
         try {
-            String result = podService.delete(podName, id);
+            String result = podService.delete(podName, id, param.get("course"));
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (ApiException e) {
             e.printStackTrace();
@@ -68,21 +61,16 @@ public class PodController {
     }
 
     @CrossOrigin
+
     @GetMapping("/logt")
-    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestParam String podName) {
+    public ResponseEntity<String> log(@RequestParam("id") String id, @RequestParam String podName, @RequestParam String course) {
         try {
-            String log = podService.log(podName, id);
+
+            String log = podService.log(podName, id, course);
             return new ResponseEntity<>(log, HttpStatus.OK);
         } catch (ApiException e) {
             return new ResponseEntity<>(HttpStatus.valueOf(e.getCode()));
         }
     }
 
-    @CrossOrigin
-    @GetMapping("/shell")
-    public ResponseEntity<String> shell(@RequestParam("id") String id, @RequestBody Map<String, String> param) {
-        String name = param.get("podName");
-        String log = podService.shell(name, id);
-        return new ResponseEntity<>(log, HttpStatus.OK);
-    }
 }

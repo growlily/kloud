@@ -7,6 +7,9 @@ import Course from "@/components/course/Course";
 import Container from "@/components/container/Container";
 import Logging from "@/components/logging/Logging";
 import Private from "@/components/private/Private";
+import CourseItem from "@/components/course/CourseItem";
+import Terminal from "@/components/container/Terminal";
+import Node from "@/components/node/Node";
 
 Vue.use(Router)
 
@@ -22,6 +25,11 @@ const routes = [
         component: Login
     },
     {
+        path: '/terminal/:course/:pod',
+        name: 'terminal',
+        component: Terminal
+    },
+    {
         path: '/home',
         name: 'home',
         component: Home,
@@ -30,12 +38,24 @@ const routes = [
             {
                 path: '/course',
                 name: 'course',
-                component: Course
+                component: Course,
+                children: [
+                    {
+                        path: '/course/:id',
+                        name: 'courseItem',
+                        component: CourseItem
+                    }
+                ]
             },
             {
                 path: '/container',
                 name: 'container',
                 component: Container
+            },
+            {
+                path: '/node',
+                name: 'node',
+                component: Node
             },
             {
                 path: '/logging',

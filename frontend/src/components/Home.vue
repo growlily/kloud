@@ -22,6 +22,14 @@
                         <span slot="title">日志记录</span>
                     </el-menu-item>
                 </el-menu>
+                <el-menu background-color="#31a6ee" router v-if="userType === 2">
+                    <el-menu-item index="/node">
+                        <span slot="title">节点信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="/logging">
+                        <span slot="title">日志记录</span>
+                    </el-menu-item>
+                </el-menu>
             </el-col>
         </el-aside>
         <el-container>
@@ -123,6 +131,7 @@
         width: 100%;
         padding-left: 0;
         background-color: white;
+        z-index: 9999;
     }
 
     .el_main {

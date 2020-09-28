@@ -20,6 +20,7 @@ import { FitAddon } from "xterm-addon-fit";
 
 export default {
   props: {
+    course: String,
     podName: String,
   },
   data() {
@@ -37,6 +38,7 @@ export default {
         .get("/pod/logt", {
           params: {
             id: user.login,
+            course: this.$props.course,
             podName: this.$props.podName,
           },
         })
