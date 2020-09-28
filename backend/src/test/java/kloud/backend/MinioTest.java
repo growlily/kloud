@@ -92,9 +92,8 @@ public class MinioTest {
     private MinioUtil minioUtil;
 
     @Test
-    public void test6() {
-        String url = minioUtil.getUrl("test2", "1.jpg");
-        System.out.println(url);
+    public void test6() throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InvalidBucketNameException, ErrorResponseException {
+
     }
 
 }

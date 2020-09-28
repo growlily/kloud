@@ -8,27 +8,27 @@
                         <span slot="title">课程信息</span>
                     </el-menu-item>
                     <el-menu-item index="/container">
-                        <span slot="title">容器信息</span>
+                        <span slot="title">个人容器信息</span>
                     </el-menu-item>
-                    <el-menu-item index="/logging">
-                        <span slot="title">日志记录</span>
-                    </el-menu-item>
+<!--                    <el-menu-item index="/logging">-->
+<!--                        <span slot="title">日志记录</span>-->
+<!--                    </el-menu-item>-->
                 </el-menu>
                 <el-menu background-color="#31a6ee" router v-if="userType == 1">
                     <el-menu-item index="/course">
                         <span slot="title">我的课程</span>
                     </el-menu-item>
-                    <el-menu-item index="/logging">
-                        <span slot="title">日志记录</span>
-                    </el-menu-item>
+<!--                    <el-menu-item index="/logging">-->
+<!--                        <span slot="title">日志记录</span>-->
+<!--                    </el-menu-item>-->
                 </el-menu>
                 <el-menu background-color="#31a6ee" router v-if="userType === 2">
                     <el-menu-item index="/node">
                         <span slot="title">节点信息</span>
                     </el-menu-item>
-                    <el-menu-item index="/logging">
-                        <span slot="title">日志记录</span>
-                    </el-menu-item>
+<!--                    <el-menu-item index="/logging">-->
+<!--                        <span slot="title">日志记录</span>-->
+<!--                    </el-menu-item>-->
                 </el-menu>
             </el-col>
         </el-aside>

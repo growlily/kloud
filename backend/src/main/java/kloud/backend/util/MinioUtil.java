@@ -91,6 +91,10 @@ public class MinioUtil {
         return null;
     }
 
+//    public boolean exits() {
+//        minioClient.
+//    }
+
     public void removeObject(String buckName, String fileName) {
         try {
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(buckName).object(fileName).build());
