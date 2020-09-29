@@ -43,7 +43,7 @@ public class TaskService {
         Task task = addTask(taskName, taskInfo, fromTime, endTime, delayTime,
                  fileName,Long.valueOf(courseId));
         String taskId = task.getId().toString();
-        String buckName = Constants.BUCKET_PREFIX + taskId;
+        String buckName = Constants.BUCKET_PREFIX + taskId; //桶命名规则: 'task' + taskId
         String minioFileName = taskId + fileName.substring(fileName.lastIndexOf('.'));
         String url = minioUtil.upload(buckName, file, minioFileName);
         task.setTaskResource(url);

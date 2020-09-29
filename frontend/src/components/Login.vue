@@ -26,7 +26,7 @@
         data () {
             return {
                 loginForm: {
-                    username: '17373189',
+                    username: '0000',
                     password: '12345678'
                 },
                 responseResult: []

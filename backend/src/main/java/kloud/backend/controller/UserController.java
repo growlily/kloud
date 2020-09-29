@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,5 +43,31 @@ public class UserController {
         return userService.changePwd(changePwdVM) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
+    @CrossOrigin
+    @PostMapping("/getAll")
+    public ResponseEntity<List<User>> getAll() {
+        return ResponseEntity.ok(userService.getAll());
+    }
+
+    @CrossOrigin
+    @PostMapping("/addUser")
+    public ResponseEntity<Void> addUser(@RequestBody Map<String, String> map) {
+        userService.addUser(map);
+        return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin
+    @GetMapping("/deleteUser")
+    public ResponseEntity<Void> deleteUser(@RequestParam Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin
+    @GetMapping("/resetPwd")
+    public ResponseEntity<Void> resetPassword(@RequestParam Long id) {
+        userService.resetPassword(id);
+        return ResponseEntity.ok().build();
+    }
 
 }

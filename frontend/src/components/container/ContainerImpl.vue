@@ -1,7 +1,9 @@
 <template>
   <el-card class="box-card">
     <el-row type="flex" justify="start">
-      <create-pod :course="$props.course" :submitCallback="getPodList"></create-pod>
+      <create-pod :course="$props.course" :submitCallback="getPodList"
+                  v-if="courseId == '0' || userType !== '0'"
+      ></create-pod>
       <el-button icon="el-icon-refresh" @click="getPodList">刷新</el-button>
       <el-input
           placeholder="搜索"
@@ -51,6 +53,8 @@ export default {
     return {
       searchInput: "",
       podList: [],
+      courseId: '',
+      userType: ''
     };
   },
   computed: {
@@ -74,6 +78,8 @@ export default {
   },
   mounted() {
     this.getPodList();
+    this.userType = window.sessionStorage.getItem('userType')
+    this.courseId = this.$props.course
   },
   methods: {
     getPodList() {

@@ -200,12 +200,17 @@
                              label="延期时间">
 
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" min-width="140px">
                 <template slot-scope="scope">
                     <el-button type="info"
                                icon="el-icon-edit" size="mini"
                                @click="detailTask(scope.row)">
                         详细信息
+                    </el-button>
+                    <el-button type="primary"
+                               icon="el-icon-download"
+                               size="mini" @click="taskHomework(scope.row)">
+                        学生作业
                     </el-button>
                     <el-button type="danger"
                                icon="el-icon-delete"

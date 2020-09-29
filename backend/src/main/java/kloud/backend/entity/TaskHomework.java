@@ -24,4 +24,6 @@ public class TaskHomework extends AbstractAuditingEntity implements Serializable
 
     private String fileName;
 
+    private String originFileName;
+
 }

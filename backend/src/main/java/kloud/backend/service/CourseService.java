@@ -3,6 +3,7 @@ package kloud.backend.service;
 import kloud.backend.controller.vm.AddCourseVM;
 import kloud.backend.entity.Course;
 import kloud.backend.repository.CourseRepository;
+import kloud.backend.service.dto.StudentCourseDTO;
 import kloud.backend.util.TimeUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -42,5 +43,8 @@ public class CourseService {
     }
 
 
+    public List<StudentCourseDTO> getCoursesByStudentId(Long id) {
+        return courseRepository.getCoursesByStudentId(id);
+    }
 
 }

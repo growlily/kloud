@@ -23,9 +23,13 @@
 <!--                    </el-menu-item>-->
                 </el-menu>
                 <el-menu background-color="#31a6ee" router v-if="userType === 2">
+                    <el-menu-item index="/user">
+                        <span slot="title">用户信息</span>
+                    </el-menu-item>
                     <el-menu-item index="/node">
                         <span slot="title">节点信息</span>
                     </el-menu-item>
+
 <!--                    <el-menu-item index="/logging">-->
 <!--                        <span slot="title">日志记录</span>-->
 <!--                    </el-menu-item>-->
@@ -83,6 +87,7 @@
             let user = JSON.parse(window.sessionStorage.getItem('user'))
             this.userType = user.userType
             this.username = user.realName
+
         },
 
         methods: {

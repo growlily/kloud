@@ -2,6 +2,7 @@ package kloud.backend;
 
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.messages.Item;
 import kloud.backend.util.MinioUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,10 +92,7 @@ public class MinioTest {
     @Autowired
     private MinioUtil minioUtil;
 
-    @Test
-    public void test6() throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InvalidBucketNameException, ErrorResponseException {
 
-    }
 
 }
 
