@@ -22,4 +22,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Optional<Task> findById(Long id);
 
+    void deleteAllByCourseId(Long courseId);
+
 }

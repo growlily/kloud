@@ -43,6 +43,7 @@ public class UserCourseService {
         course.setTotal(course.getTotal() - collect.size());
         courseRepository.save(course);
         userCourseRepository.deleteAllByCourseIdAndStudentIdIn(Long.valueOf((String) params.get("courseId")), collect);
+
     }
 
     @SuppressWarnings("unchecked")

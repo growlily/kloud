@@ -126,25 +126,7 @@ public class MinioUtil {
             if(minioClient.bucketExists(BucketExistsArgs.builder().bucket(buckName).build())) {
                 minioClient.removeBucket(RemoveBucketArgs.builder().bucket(buckName).build());
             }
-        } catch (ErrorResponseException e) {
-            e.printStackTrace();
-        } catch (InsufficientDataException e) {
-            e.printStackTrace();
-        } catch (InternalException e) {
-            e.printStackTrace();
-        } catch (InvalidBucketNameException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidResponseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (ServerException e) {
-            e.printStackTrace();
-        } catch (XmlParserException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

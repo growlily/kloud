@@ -282,7 +282,7 @@
             submitTask(row) {
                 this.homework = row
                 this.submitDialogVisible = true
-                this.$axios.get('/taskHomework/isSubmited', {
+                this.$axios.get('/taskHomework/isSubmitted', {
                     params: {
                         userId: window.sessionStorage.getItem('id'),
                         taskId: row.id

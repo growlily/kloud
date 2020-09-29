@@ -92,7 +92,16 @@ public class MinioTest {
     @Autowired
     private MinioUtil minioUtil;
 
+    @Test
+    public void test5() {
+        MinioClient minioClient = minioUtil.newMinioClient();
+        try {
+            minioClient.removeBucket(RemoveBucketArgs.builder().bucket("1111").build());
+        } catch (Exception e) {
 
+        }
+        
+    }
 
 }
 

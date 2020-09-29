@@ -32,6 +32,9 @@ public class TaskService {
     @Resource
     private MinioUtil minioUtil;
 
+    @Resource
+    private TaskHomeworkService taskHomeworkService;
+
     public List<Task> getAllTasksByCourseId(Long courseId) {
         return taskRepository.findAllByCourseId(courseId);
     }
@@ -76,6 +79,7 @@ public class TaskService {
 
     public void deleteTaskById(Long id) {
         minioUtil.removeBucket(Constants.BUCKET_PREFIX + id);
+        taskHomeworkService.deleteAllByTaskId(id);
         taskRepository.deleteById(id);
     }
 

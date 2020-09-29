@@ -27,7 +27,9 @@ public interface UserCourseRepository extends JpaRepository<UserCourse, Long> {
 
     void deleteAllByCourseIdAndStudentIdIn(Long courseId, List<Long> studentId);
 
+    void deleteAllByCourseId(Long courseId);
 
+    long countAllByCourseId(Long courseId);
 
 
 }
