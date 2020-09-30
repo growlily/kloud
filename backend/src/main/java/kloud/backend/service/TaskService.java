@@ -8,6 +8,7 @@ import kloud.backend.entity.User;
 import kloud.backend.repository.CourseRepository;
 import kloud.backend.repository.TaskRepository;
 import kloud.backend.repository.UserRepository;
+import kloud.backend.service.dto.StudentTaskDTO;
 import kloud.backend.util.MinioUtil;
 import kloud.backend.util.TimeUtils;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class TaskService {
     @Resource
     private MinioUtil minioUtil;
 
+    @Resource
+    private TaskHomeworkService taskHomeworkService;
+
     public List<Task> getAllTasksByCourseId(Long courseId) {
         return taskRepository.findAllByCourseId(courseId);
     }
@@ -42,7 +46,7 @@ public class TaskService {
         Task task = addTask(taskName, taskInfo, fromTime, endTime, delayTime,
                  fileName,Long.valueOf(courseId));
         String taskId = task.getId().toString();
-        String buckName = Constants.BUCKET_PREFIX + taskId;
+        String buckName = Constants.BUCKET_PREFIX + taskId; //桶命名规则: 'task' + taskId
         String minioFileName = taskId + fileName.substring(fileName.lastIndexOf('.'));
         String url = minioUtil.upload(buckName, file, minioFileName);
         task.setTaskResource(url);
@@ -75,6 +79,7 @@ public class TaskService {
 
     public void deleteTaskById(Long id) {
         minioUtil.removeBucket(Constants.BUCKET_PREFIX + id);
+        taskHomeworkService.deleteAllByTaskId(id);
         taskRepository.deleteById(id);
     }
 
@@ -115,6 +120,15 @@ public class TaskService {
         task.setEndTime(TimeUtils.parseTime(endTime));
         task.setDelayTime(TimeUtils.parseTime(delayTime));
         taskRepository.save(task);
+    }
+
+
+    public List<StudentTaskDTO> getAllStudentTasks(Long id) {
+        return taskRepository.getAllTasksByStudentId(id);
+    }
+
+    public Task getOneTaskById(Long id) {
+        return taskRepository.findById(id).get();
     }
 
 }

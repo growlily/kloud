@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -17,6 +19,9 @@ public class UserService {
 
     @Resource
     private UserRepository userRepository;
+
+    @Resource
+    private NamespaceService namespaceService;
 
     /**
      * The very first version of log-in service.
@@ -52,4 +57,31 @@ public class UserService {
                 .orElse(false);
     }
 
+
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    public void addUser(Map<String, String> map) {
+        User user = new User();
+        user.setLogin(map.get("login"));
+        user.setPassword(map.get("password"));
+        user.setRealName(map.get("realName"));
+        user.setEmail(map.get("email"));
+        user.setUserType(Integer.valueOf(map.get("userType")));
+        user.setCreatedBy(map.get("createdBy"));
+        userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void resetPassword(Long id) {
+        User user = userRepository.findOneById(id).get();
+        user.setPassword("12345678");
+        userRepository.save(user);
+    }
+
 }
+

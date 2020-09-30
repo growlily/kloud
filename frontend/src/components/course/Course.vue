@@ -19,6 +19,10 @@
         mounted() {
             let user = JSON.parse(window.sessionStorage.getItem('user'))
             this.userType = user.userType;
+
+        },
+        methods: {
+
         }
     }
 </script>

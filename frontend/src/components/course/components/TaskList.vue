@@ -94,6 +94,52 @@
                 </div>
             </el-form>
         </el-dialog>
+
+        <el-table
+                :data="taskDataShow"
+                stripe
+                border
+        >
+            <el-table-column type="index">
+
+            </el-table-column>
+            <el-table-column prop="taskName"
+                             label="任务名">
+
+            </el-table-column>
+            <el-table-column prop="fromTime"
+                             label="开始时间" sortable>
+
+            </el-table-column>
+            <el-table-column prop="endTime"
+                             label="结束时间" sortable>
+
+            </el-table-column>
+            <el-table-column prop="delayTime"
+                             label="延期时间" sortable>
+
+            </el-table-column>
+            <el-table-column label="操作" min-width="140px">
+                <template slot-scope="scope">
+                    <el-button type="info"
+                               icon="el-icon-edit" size="mini"
+                               @click="detailTask(scope.row)">
+                        详细信息
+                    </el-button>
+                    <el-button type="primary"
+                               icon="el-icon-download"
+                               size="mini"
+                               @click="taskHomeworkDetail(scope.row)">
+                        学生作业
+                    </el-button>
+                    <el-button type="danger"
+                               icon="el-icon-delete"
+                               size="mini" @click="deleteTask(scope.row)">
+                        删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
         <!--详细信息对话框-->
         <el-dialog title="详细信息" :visible.sync="detailDialogVisible"
                    width="30%" style="padding-left: 30px;padding-right: 30px">
@@ -176,46 +222,30 @@
                 </div>
             </el-form>
         </el-dialog>
-        <el-table
-                :data="taskDataShow"
-                stripe
-                border
-        >
-            <el-table-column type="index">
+        <!--学生作业对话框-->
+        <el-dialog title="作业信息"
+                   :visible.sync="homeworkDialogVisible" width="30%"
+                   style="padding-left: 30px; padding-right: 30px;">
+            <span style="margin-right: 10px;">已有{{homeworkStatistics
+                .submitted}}人提交作业</span>
+            <el-button @click="downloadHomework"
+                       v-if="homeworkStatistics.submitted !== 0">
+                下载</el-button>
+            <p style="font-size: 18px;">未提交{{homeworkStatistics.notSubmitted}}人，名单如下</p>
+            <el-table :data="notSubmitList" stripe border height="250px" style="margin-top: 20px;">
+                <el-table-column type="index">
 
-            </el-table-column>
-            <el-table-column prop="taskName"
-                             label="任务名">
+                </el-table-column>
+                <el-table-column prop="login"
+                                 label="学号">
 
-            </el-table-column>
-            <el-table-column prop="fromTime"
-                             label="开始时间">
+                </el-table-column>
+                <el-table-column prop="realName"
+                                 label="姓名">
 
-            </el-table-column>
-            <el-table-column prop="endTime"
-                             label="结束时间">
-
-            </el-table-column>
-            <el-table-column prop="delayTime"
-                             label="延期时间">
-
-            </el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button type="info"
-                               icon="el-icon-edit" size="mini"
-                               @click="detailTask(scope.row)">
-                        详细信息
-                    </el-button>
-                    <el-button type="danger"
-                               icon="el-icon-delete"
-                               size="mini" @click="deleteTask(scope.row)">
-                        删除
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 
@@ -248,7 +278,23 @@
                     taskResourceName: '',
                     file: null
                 },
-                updateFileList: []
+                updateFileList: [],
+                taskHomework: {},
+                homeworkDialogVisible: false,
+                notSubmitList: [
+                    {
+                        login: '17373516',
+                        realName: '敖远超'
+                    },
+                    {
+                        login: '17373516',
+                        realName: '敖远超'
+                    }
+                ],
+                homeworkStatistics: {
+                    submitted: 0,
+                    notSubmitted: 13
+                }
             }
         },
         computed: {
@@ -265,6 +311,29 @@
             this.getTasks()
         },
         methods: {
+            taskHomeworkDetail(row) {
+                this.taskHomework = row
+                this.homeworkDialogVisible = true
+                let config = {
+                    params: {
+                        taskId: row.id,
+                        courseId: this.$route.params.id
+                    }
+                }
+                this.$axios.get('/taskHomework/getHomeworkStatistics', config)
+                    .then(successResponse => {
+                        this.homeworkStatistics = successResponse.data
+                    })
+                this.$axios.get('/taskHomework/getAllNotSubmitted', config)
+                    .then(successResponse => {
+                        this.notSubmitList = successResponse.data
+                    })
+            },
+            downloadHomework() {
+                window.open(this.$axios.defaults.baseURL +
+                    '/taskHomework/downloadHomework?taskId=' +
+                    this.taskHomework.id)
+            },
             getTasks() {
                 this.$axios
                     .post('/task/getAll', {'courseId': this.$route.params.id})

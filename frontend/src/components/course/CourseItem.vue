@@ -3,7 +3,7 @@
         <div class="course_item_main">
             <div style="float: left;">
             <el-button type="primary" style="font-size: 16px;"
-                       @click="$router.replace({path: '/course'})"><span
+                       @click="returnToCoursePage"><span
                     class="el-icon-back"></span>返回
             </el-button>
             </div>
@@ -19,7 +19,7 @@
                     class="course_title">{{courseName}}
             </span><span>({{semester}})</span></el-row>
             <!--内容-->
-            <el-collapse v-model="activeNames" accordion>
+            <el-collapse v-model="activeNames" >
                 <!--任务列表-->
                 <el-collapse-item name="1">
                     <template slot="title" >
@@ -32,7 +32,7 @@
                     <template slot="title">
                         <span class="collapse_title">学生列表</span>
                     </template>
-
+                    <student-list></student-list>
                 </el-collapse-item>
                 <!--容器列表-->
                 <el-collapse-item name="3" >
@@ -49,12 +49,13 @@
 <script>
     import TaskList from "@/components/course/components/TaskList";
     import ContainerImpl from "@/components/container/ContainerImpl";
+    import StudentList from "@/components/course/components/StudentList";
     export default {
         name: "CourseItem",
-        components: {ContainerImpl, TaskList},
+        components: {StudentList, ContainerImpl, TaskList},
         data() {
             return {
-                activeNames: '',
+                activeNames: ['1','2','3'],
                 courseName: window.sessionStorage.getItem('courseName'),
                 semester: window.sessionStorage.getItem('semester')
             }
@@ -73,7 +74,10 @@
                         })
                 })
             },
-
+            returnToCoursePage() {
+                this.$router.replace({path: '/course'})
+                window.location.reload()
+            }
         }
     }
 </script>

@@ -2,6 +2,7 @@ package kloud.backend;
 
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.messages.Item;
 import kloud.backend.util.MinioUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,9 +93,14 @@ public class MinioTest {
     private MinioUtil minioUtil;
 
     @Test
-    public void test6() {
-        String url = minioUtil.getUrl("test2", "1.jpg");
-        System.out.println(url);
+    public void test5() {
+        MinioClient minioClient = minioUtil.newMinioClient();
+        try {
+            minioClient.removeBucket(RemoveBucketArgs.builder().bucket("1111").build());
+        } catch (Exception e) {
+
+        }
+        
     }
 
 }

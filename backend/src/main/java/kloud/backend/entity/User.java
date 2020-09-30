@@ -44,7 +44,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String login;
 
-    @JsonIgnore
+//    @JsonIgnore
     @NotNull
     @Size(min = 1, max = 60)
     @Column(name = "password", length = 60, nullable = false)
@@ -60,11 +60,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String email;
 
     private Integer userType = 0;   //1为教师，2为管理员
-
-    @ToString.Exclude
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "students")
-    private List<Course> myCourses = new ArrayList<>(); //学生参与的课程
 
     @Override
     public boolean equals(Object obj) {
