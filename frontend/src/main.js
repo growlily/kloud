@@ -5,12 +5,8 @@ import router from "@/router";
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
-import process from 'process';
 
-let server = 'localhost:8888'
-if (process.env.NODE_ENV === 'production')
-  server = process.env.SERVER
-axios.defaults.baseURL = `http://${server}/api`
+axios.defaults.baseURL = `http://10.251.253.65:8888/api`
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 Vue.config.productionTip = false
